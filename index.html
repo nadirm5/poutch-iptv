@@ -2,236 +2,255 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>SKY TV | Premium IPTV</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #0A0A1A 0%, #0F0F2A 100%); color: #fff; min-height: 100vh; }
-        .sky-header { background: linear-gradient(135deg, #0A0A2A 0%, #0F0F3A 100%); padding: 25px 20px; border-bottom: 2px solid rgba(0, 191, 255, 0.3); position: relative; overflow: hidden; }
-        .sky-header::before { content: ''; position: absolute; top: -50%; right: -30%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(0,191,255,0.1) 0%, transparent 70%); pointer-events: none; }
-        .sky-header-content { display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 2; }
-        .logo-sky { display: flex; align-items: center; gap: 15px; }
-        .sky-icon { width: 55px; height: 55px; background: linear-gradient(135deg, #00BFFF, #1E90FF); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 32px; box-shadow: 0 10px 25px rgba(0,191,255,0.4); }
-        .sky-text h1 { font-size: 28px; font-weight: 800; background: linear-gradient(135deg, #00BFFF, #1E90FF); -webkit-background-clip: text; background-clip: text; color: transparent; }
-        .sky-text p { font-size: 10px; color: #888; letter-spacing: 2px; }
-        .badge-sky { background: rgba(0,191,255,0.2); padding: 8px 16px; border-radius: 30px; font-size: 11px; font-weight: 600; color: #00BFFF; border: 1px solid rgba(0,191,255,0.3); cursor: pointer; }
-        .nav-sky { padding: 15px 20px 0 20px; }
-        .nav-items-sky { display: flex; gap: 10px; background: rgba(10,10,30,0.8); padding: 6px; border-radius: 60px; }
-        .nav-sky-item { flex: 1; padding: 12px 8px; text-align: center; border-radius: 50px; font-weight: 600; font-size: 12px; cursor: pointer; color: #888; transition: all 0.3s; }
-        .nav-sky-item.active { background: linear-gradient(135deg, #00BFFF, #1E90FF); color: white; box-shadow: 0 4px 15px rgba(0,191,255,0.3); }
-        .login-sky { margin: 20px; padding: 25px; background: rgba(10,10,30,0.8); backdrop-filter: blur(20px); border-radius: 30px; border: 1px solid rgba(0,191,255,0.2); }
-        .login-sky h2 { font-size: 22px; margin-bottom: 5px; background: linear-gradient(135deg, #00BFFF, #fff); -webkit-background-clip: text; background-clip: text; color: transparent; }
-        .login-sky p { font-size: 12px; color: #666; margin-bottom: 20px; }
-        .input-sky { width: 100%; padding: 15px; background: rgba(0,0,0,0.5); border: 1px solid rgba(0,191,255,0.3); border-radius: 20px; color: white; font-size: 14px; margin-bottom: 12px; }
-        .input-sky:focus { outline: none; border-color: #00BFFF; }
-        .mode-sky { display: flex; gap: 10px; margin: 20px 0; background: rgba(0,0,0,0.5); padding: 5px; border-radius: 50px; }
-        .mode-sky-option { flex: 1; padding: 12px; text-align: center; border-radius: 50px; font-size: 13px; font-weight: 500; cursor: pointer; color: #888; }
-        .mode-sky-option.active { background: linear-gradient(135deg, #00BFFF, #1E90FF); color: white; }
-        .btn-sky { width: 100%; padding: 16px; background: linear-gradient(135deg, #00BFFF, #1E90FF); border: none; border-radius: 50px; color: white; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 10px; }
-        .content-sky { padding: 15px; max-height: 55vh; overflow-y: auto; }
-        .category-sky { margin-bottom: 25px; }
-        .category-sky-header { display: flex; justify-content: space-between; padding: 10px 15px; background: rgba(0,191,255,0.1); border-radius: 15px; margin-bottom: 12px; border-left: 3px solid #00BFFF; }
-        .category-sky-name { font-weight: 700; font-size: 14px; color: #00BFFF; }
-        .channels-sky-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 12px; }
-        .channel-sky-card { background: rgba(20,20,50,0.6); border-radius: 18px; padding: 12px 8px; text-align: center; cursor: pointer; border: 1px solid rgba(0,191,255,0.2); }
-        .channel-sky-card:active { transform: scale(0.95); background: rgba(0,191,255,0.2); }
-        .channel-sky-icon { font-size: 32px; margin-bottom: 8px; }
-        .channel-sky-name { font-size: 11px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .player-sky-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 1000; display: none; flex-direction: column; }
-        .player-sky-modal.active { display: flex; }
-        .player-sky-header { padding: 15px 20px; background: linear-gradient(135deg, #0A0A2A, #0F0F3A); display: flex; justify-content: space-between; align-items: center; }
-        .player-sky-title { font-weight: 700; color: #00BFFF; }
-        .player-sky-close { width: 40px; height: 40px; background: rgba(0,191,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        body { font-family: system-ui, sans-serif; background: #0A0A1A; color: white; }
+        .header { background: linear-gradient(135deg, #0A0A2A, #0F0F3A); padding: 25px; text-align: center; }
+        .logo { font-size: 36px; font-weight: 800; color: #00BFFF; }
+        .sub { font-size: 10px; color: #888; }
+        .tabs { display: flex; background: #111; padding: 12px; gap: 8px; }
+        .tab { flex: 1; text-align: center; padding: 12px; border-radius: 30px; font-weight: bold; cursor: pointer; color: #888; background: #1a1a2a; }
+        .tab.active { background: linear-gradient(135deg, #00BFFF, #1E90FF); color: white; }
+        .login-card { margin: 20px; padding: 25px; background: #0F0F2A; border-radius: 25px; }
+        input { width: 100%; padding: 14px; margin: 8px 0; background: #1a1a2a; border: 1px solid #2a2a3a; border-radius: 12px; color: white; }
+        .mode-switch { display: flex; gap: 10px; margin: 15px 0; }
+        .mode-btn { flex: 1; padding: 12px; text-align: center; background: #1a1a2a; border-radius: 30px; cursor: pointer; }
+        .mode-btn.active { background: #00BFFF; }
+        button { width: 100%; padding: 15px; background: linear-gradient(135deg, #00BFFF, #1E90FF); border: none; border-radius: 30px; color: white; font-weight: bold; cursor: pointer; }
+        .channels-area { padding: 15px; max-height: 55vh; overflow-y: auto; }
+        .channel-card { background: #1a1a2a; padding: 12px; margin: 5px 0; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 10px; }
+        .channel-card:active { background: #00BFFF; transform: scale(0.98); }
+        .player-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 1000; display: none; flex-direction: column; }
+        .player-modal.active { display: flex; }
+        .player-header { padding: 15px; background: #111; display: flex; justify-content: space-between; }
+        .close-player { font-size: 24px; cursor: pointer; }
         video { width: 100%; flex: 1; background: #000; }
-        .settings-sky-panel { position: fixed; bottom: 0; left: 0; right: 0; background: linear-gradient(135deg, #0F0F2A, #0A0A1A); border-radius: 30px 30px 0 0; padding: 25px; z-index: 200; display: none; border-top: 1px solid rgba(0,191,255,0.3); }
-        .settings-sky-panel.active { display: block; }
-        .settings-sky-title { font-size: 20px; font-weight: 700; margin-bottom: 20px; color: #00BFFF; }
-        .setting-sky-item { padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; cursor: pointer; }
-        .loading-sky { text-align: center; padding: 40px; color: #00BFFF; }
-        .error-sky { text-align: center; padding: 30px; color: #FF4757; background: rgba(255,71,87,0.1); border-radius: 20px; margin: 15px; }
+        .loading { text-align: center; padding: 40px; color: #00BFFF; }
+        .error { text-align: center; padding: 30px; color: #FF4757; background: rgba(255,71,87,0.1); border-radius: 20px; margin: 15px; }
+        .info { text-align: center; padding: 20px; color: #888; font-size: 12px; }
     </style>
 </head>
 <body>
 
-    <div class="sky-header">
-        <div class="sky-header-content">
-            <div class="logo-sky">
-                <div class="sky-icon">☁️</div>
-                <div class="sky-text">
-                    <h1>SKY TV</h1>
-                    <p>PREMIUM IPTV EXPERIENCE</p>
-                </div>
-            </div>
-            <div class="badge-sky" onclick="openSettings()">⚙️ SETTINGS</div>
-        </div>
+    <div class="header">
+        <div class="logo">☁️ SKY TV</div>
+        <div class="sub">PREMIUM IPTV EXPERIENCE</div>
     </div>
 
-    <div class="nav-sky">
-        <div class="nav-items-sky">
-            <div class="nav-sky-item active" onclick="switchTab('channels')">📺 CHAÎNES</div>
-            <div class="nav-sky-item" onclick="switchTab('movies')">🎬 FILMS</div>
-            <div class="nav-sky-item" onclick="switchTab('series')">📺 SÉRIES</div>
-            <div class="nav-sky-item" onclick="switchTab('favorites')">⭐ FAVORIS</div>
-        </div>
+    <div class="tabs">
+        <div class="tab active" onclick="switchTab('channels')">📺 CHAÎNES</div>
+        <div class="tab" onclick="switchTab('movies')">🎬 FILMS</div>
+        <div class="tab" onclick="switchTab('favorites')">⭐ FAVORIS</div>
     </div>
 
-    <div id="loginCard" class="login-sky">
-        <h2>✨ Connexion SKY TV</h2>
-        <p>Entrez vos identifiants IPTV</p>
-        <input type="text" id="serverUrl" class="input-sky" placeholder="URL du serveur (ex: http://ip:8080)">
-        <input type="text" id="username" class="input-sky" placeholder="Nom d'utilisateur">
-        <input type="password" id="password" class="input-sky" placeholder="Mot de passe">
-        <div class="mode-sky">
-            <div class="mode-sky-option active" onclick="switchMode('xtream')">🔑 XTREAM CODES</div>
-            <div class="mode-sky-option" onclick="switchMode('m3u')">📄 M3U PLAYLIST</div>
+    <div id="loginCard" class="login-card">
+        <div class="info">📡 Entrez vos identifiants IPTV</div>
+        
+        <input type="text" id="serverUrl" placeholder="URL du serveur (ex: http://ip:8080)">
+        <input type="text" id="username" placeholder="Nom d'utilisateur">
+        <input type="password" id="password" placeholder="Mot de passe">
+        
+        <div class="mode-switch">
+            <div class="mode-btn active" onclick="switchMode('xtream')">🔑 XTREAM</div>
+            <div class="mode-btn" onclick="switchMode('m3u')">📄 M3U</div>
         </div>
+        
         <div id="m3uField" style="display: none;">
-            <input type="text" id="m3uUrl" class="input-sky" placeholder="Lien M3U">
+            <input type="text" id="m3uUrl" placeholder="Lien M3U complet">
+            <div class="info">📋 Exemple: http://serveur:8080/get.php?username=xxx&password=xxx&type=m3u_plus</div>
         </div>
-        <button class="btn-sky" onclick="connect()">🔌 SE CONNECTER</button>
+        
+        <button onclick="connect()">🔌 SE CONNECTER</button>
     </div>
 
-    <div id="contentArea" class="content-sky">
-        <div class="loading-sky">✨ Bienvenue sur SKY TV</div>
+    <div id="channelsList" class="channels-area">
+        <div class="loading">✨ Entrez vos identifiants</div>
     </div>
 
-    <div id="playerModal" class="player-sky-modal">
-        <div class="player-sky-header">
-            <span class="player-sky-title" id="playerTitle">SKY TV Player</span>
-            <div class="player-sky-close" onclick="closePlayer()">✕</div>
+    <div id="playerModal" class="player-modal">
+        <div class="player-header">
+            <span id="playerTitle">SKY TV Player</span>
+            <span class="close-player" onclick="closePlayer()">✕</span>
         </div>
         <video id="videoPlayer" controls></video>
     </div>
 
-    <div id="settingsPanel" class="settings-sky-panel">
-        <div class="settings-sky-title">⚙️ Paramètres SKY TV</div>
-        <div class="setting-sky-item" onclick="clearFavorites()"><span>⭐ Effacer les favoris</span><span>🗑️</span></div>
-        <div class="setting-sky-item" onclick="resetAll()"><span>🔄 Réinitialiser tout</span><span>⚠️</span></div>
-        <button class="btn-sky" style="margin-top: 20px;" onclick="closeSettings()">Fermer</button>
-    </div>
-
     <script>
-        const PROXY_URL = 'https://skytv-proxy.onrender.com/proxy?url=';
-        let channels = [], movies = [], series = [], favorites = JSON.parse(localStorage.getItem('skytv_fav') || '[]');
+        let channels = [], movies = [], favorites = JSON.parse(localStorage.getItem('skytv_fav') || '[]');
         let currentTab = 'channels', currentMode = 'xtream';
+        let currentServer = '', currentUser = '', currentPass = '';
 
         function switchMode(mode) {
             currentMode = mode;
-            document.querySelectorAll('.mode-sky-option').forEach(opt => opt.classList.remove('active'));
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
             document.getElementById('m3uField').style.display = mode === 'm3u' ? 'block' : 'none';
         }
 
         async function connect() {
-            const contentDiv = document.getElementById('contentArea');
-            contentDiv.innerHTML = '<div class="loading-sky">🔄 Connexion à SKY TV...</div>';
+            const listDiv = document.getElementById('channelsList');
+            listDiv.innerHTML = '<div class="loading">🔄 Connexion à SKY TV...</div>';
+            
             try {
                 if (currentMode === 'xtream') {
-                    const server = document.getElementById('serverUrl').value;
-                    const user = document.getElementById('username').value;
-                    const pass = document.getElementById('password').value;
-                    if (!server || !user || !pass) throw new Error('Remplissez tous les champs');
-                    await loadXtream(server, user, pass);
+                    currentServer = document.getElementById('serverUrl').value;
+                    currentUser = document.getElementById('username').value;
+                    currentPass = document.getElementById('password').value;
+                    
+                    if (!currentServer || !currentUser || !currentPass) {
+                        throw new Error('Remplissez tous les champs');
+                    }
+                    
+                    // Nettoyer l'URL
+                    currentServer = currentServer.replace(/\/$/, '');
+                    
+                    // Essayer plusieurs formats d'API
+                    let data = null;
+                    const apiUrls = [
+                        `${currentServer}/player_api.php?username=${currentUser}&password=${currentPass}`,
+                        `${currentServer}/api.php?username=${currentUser}&password=${currentPass}`,
+                        `${currentServer}/panel_api.php?username=${currentUser}&password=${currentPass}`
+                    ];
+                    
+                    const proxy = 'https://api.allorigins.win/raw?url=';
+                    
+                    for (let apiUrl of apiUrls) {
+                        try {
+                            const response = await fetch(proxy + encodeURIComponent(apiUrl));
+                            if (response.ok) {
+                                data = await response.json();
+                                if (data && (data.user_info || data.live)) break;
+                            }
+                        } catch(e) { continue; }
+                    }
+                    
+                    if (!data) {
+                        throw new Error('Impossible de contacter le serveur. Vérifiez vos identifiants.');
+                    }
+                    
+                    // Extraire les chaînes
+                    if (data.live && data.live.length > 0) {
+                        channels = data.live.map(ch => ({
+                            name: ch.name || ch.channel_name || 'Chaîne',
+                            url: `${currentServer}/live/${currentUser}/${currentPass}/${ch.stream_id || ch.channel_id}.ts`,
+                            group: ch.category_name || ch.group_name || 'Général'
+                        }));
+                    }
+                    
+                    // Extraire les films
+                    if (data.vod && data.vod.length > 0) {
+                        movies = data.vod.map(m => ({
+                            name: m.name || m.title || 'Film',
+                            url: `${currentServer}/movie/${currentUser}/${currentPass}/${m.stream_id || m.vod_id}.mp4`,
+                            group: m.category_name || 'Films'
+                        }));
+                    }
+                    
+                    if (channels.length === 0 && movies.length === 0) {
+                        throw new Error('Aucune chaîne trouvée. Vérifiez votre abonnement.');
+                    }
+                    
                 } else {
-                    const m3u = document.getElementById('m3uUrl').value;
-                    if (!m3u) throw new Error('Lien M3U requis');
-                    await loadM3U(m3u);
-                }
-                document.getElementById('loginCard').style.display = 'none';
-                saveCredentials();
-                displayContent();
-            } catch(e) {
-                contentDiv.innerHTML = `<div class="error-sky">❌ ${e.message}</div>`;
-            }
-        }
-
-        async function loadXtream(server, user, pass) {
-            const apiUrl = `${server}/player_api.php?username=${user}&password=${pass}`;
-            const response = await fetch(PROXY_URL + encodeURIComponent(apiUrl));
-            const data = await response.json();
-            if (!data) throw new Error('Impossible de se connecter');
-            channels = data.live?.map(ch => ({
-                name: ch.name,
-                url: `${server}/live/${user}/${pass}/${ch.stream_id}.ts`,
-                group: ch.category_name || 'Général'
-            })) || [];
-            movies = data.vod?.map(m => ({
-                name: m.name,
-                url: `${server}/movie/${user}/${pass}/${m.stream_id}.mp4`,
-                group: m.category_name || 'Films'
-            })) || [];
-        }
-
-        async function loadM3U(url) {
-            const response = await fetch(PROXY_URL + encodeURIComponent(url));
-            const content = await response.text();
-            channels = [];
-            const lines = content.split('\n');
-            for (let i = 0; i < lines.length; i++) {
-                let line = lines[i].trim();
-                if (line.startsWith('#EXTINF:')) {
-                    let name = line.split(',')[1] || 'Sans nom';
-                    let streamUrl = lines[i+1]?.trim();
-                    if (streamUrl && streamUrl.startsWith('http')) {
-                        channels.push({ name: name, url: streamUrl, group: 'Général' });
+                    const m3uUrl = document.getElementById('m3uUrl').value;
+                    if (!m3uUrl) throw new Error('Entrez un lien M3U');
+                    
+                    const proxy = 'https://api.allorigins.win/raw?url=';
+                    const response = await fetch(proxy + encodeURIComponent(m3uUrl));
+                    const content = await response.text();
+                    
+                    channels = [];
+                    const lines = content.split('\n');
+                    
+                    for (let i = 0; i < lines.length; i++) {
+                        let line = lines[i].trim();
+                        if (line.startsWith('#EXTINF:')) {
+                            let name = line.split(',')[1] || 'Chaîne';
+                            let url = lines[i+1] ? lines[i+1].trim() : '';
+                            if (url && url.startsWith('http')) {
+                                channels.push({ name, url, group: 'Général' });
+                            }
+                        }
+                    }
+                    
+                    if (channels.length === 0) {
+                        throw new Error('Aucune chaîne trouvée dans la playlist');
                     }
                 }
+                
+                // Sauvegarder et afficher
+                document.getElementById('loginCard').style.display = 'none';
+                saveData();
+                displayChannels();
+                
+            } catch(e) {
+                listDiv.innerHTML = `<div class="error">❌ ${e.message}</div>`;
+                console.error(e);
             }
         }
 
-        function displayContent() {
-            let items = [];
-            if (currentTab === 'channels') items = channels;
-            else if (currentTab === 'movies') items = movies;
-            else if (currentTab === 'favorites') items = [...channels, ...movies].filter(i => favorites.includes(i.name));
-            const groups = {};
-            items.forEach(item => { const g = item.group || 'Général'; if (!groups[g]) groups[g] = []; groups[g].push(item); });
+        function displayChannels() {
+            let items = currentTab === 'channels' ? channels : currentTab === 'movies' ? movies : channels;
             let html = '';
-            for (let g in groups) {
-                html += `<div class="category-sky"><div class="category-sky-header"><span class="category-sky-name">${g}</span><span>${groups[g].length}</span></div><div class="channels-sky-grid">`;
-                groups[g].forEach(item => {
-                    const isFav = favorites.includes(item.name);
-                    html += `<div class="channel-sky-card" onclick="playItem('${item.url}', '${item.name.replace(/'/g, "\\'")}')"><div class="channel-sky-icon">${isFav ? '⭐' : '📺'}</div><div class="channel-sky-name">${item.name}</div></div>`;
-                });
-                html += `</div></div>`;
-            }
-            document.getElementById('contentArea').innerHTML = html || '<div class="loading-sky">📭 Aucun contenu</div>';
+            
+            items.forEach(ch => {
+                html += `<div class="channel-card" onclick="playChannel('${ch.url}')">
+                    <span>📺</span>
+                    <span>${ch.name}</span>
+                </div>`;
+            });
+            
+            document.getElementById('channelsList').innerHTML = html || '<div class="loading">📭 Aucun contenu</div>';
         }
 
-        function playItem(url, name) {
+        function playChannel(url) {
             const modal = document.getElementById('playerModal');
             const video = document.getElementById('videoPlayer');
-            document.getElementById('playerTitle').innerText = name;
             video.src = url;
             video.play();
             modal.classList.add('active');
         }
 
-        function closePlayer() { const video = document.getElementById('videoPlayer'); video.pause(); video.src = ''; document.getElementById('playerModal').classList.remove('active'); }
-        function switchTab(tab) { currentTab = tab; document.querySelectorAll('.nav-sky-item').forEach(t => t.classList.remove('active')); event.target.classList.add('active'); displayContent(); }
-        function openSettings() { document.getElementById('settingsPanel').classList.add('active'); }
-        function closeSettings() { document.getElementById('settingsPanel').classList.remove('active'); }
-        function clearFavorites() { favorites = []; localStorage.setItem('skytv_fav', '[]'); if (currentTab === 'favorites') displayContent(); }
-        function resetAll() { localStorage.clear(); location.reload(); }
-        function saveCredentials() {
+        function closePlayer() {
+            const video = document.getElementById('videoPlayer');
+            video.pause();
+            video.src = '';
+            document.getElementById('playerModal').classList.remove('active');
+        }
+
+        function switchTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            displayChannels();
+        }
+
+        function saveData() {
             localStorage.setItem('skytv_mode', currentMode);
             if (currentMode === 'xtream') {
-                localStorage.setItem('skytv_server', document.getElementById('serverUrl').value);
-                localStorage.setItem('skytv_user', document.getElementById('username').value);
+                localStorage.setItem('skytv_server', currentServer);
+                localStorage.setItem('skytv_user', currentUser);
             } else {
                 localStorage.setItem('skytv_m3u', document.getElementById('m3uUrl').value);
             }
         }
+        
+        // Chargement auto
         const savedMode = localStorage.getItem('skytv_mode');
-        if (savedMode) {
-            if (savedMode === 'xtream') {
-                const s = localStorage.getItem('skytv_server');
-                const u = localStorage.getItem('skytv_user');
-                if (s && u) { document.getElementById('serverUrl').value = s; document.getElementById('username').value = u; connect(); }
-            } else {
-                const m = localStorage.getItem('skytv_m3u');
-                if (m) { document.getElementById('m3uUrl').value = m; connect(); }
+        if (savedMode === 'xtream') {
+            const s = localStorage.getItem('skytv_server');
+            const u = localStorage.getItem('skytv_user');
+            if (s && u) {
+                document.getElementById('serverUrl').value = s;
+                document.getElementById('username').value = u;
+                connect();
+            }
+        } else if (savedMode === 'm3u') {
+            const m = localStorage.getItem('skytv_m3u');
+            if (m) {
+                document.getElementById('m3uUrl').value = m;
+                connect();
             }
         }
     </script>
