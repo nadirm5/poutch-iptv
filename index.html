@@ -10,17 +10,15 @@
         .logo { font-size: 40px; font-weight: bold; color: #00BFFF; }
         button { padding: 12px; width: 100%; background: linear-gradient(135deg, #00BFFF, #1E90FF); border: none; border-radius: 10px; color: white; font-weight: bold; cursor: pointer; }
         .channel { padding: 12px; background: #1a1a2a; margin: 5px 0; border-radius: 10px; cursor: pointer; }
-        .channel:active { background: #00BFFF; }
-        video { width: 100%; margin-top: 15px; border-radius: 10px; background: #000; }
+        video { width: 100%; margin-top: 15px; }
         .loading { text-align: center; padding: 20px; color: #00BFFF; }
-        .error { text-align: center; padding: 20px; color: #FF4757; background: rgba(255,71,87,0.1); border-radius: 10px; }
+        .error { text-align: center; padding: 20px; color: #FF4757; }
     </style>
 </head>
 <body>
 
     <div class="header">
         <div class="logo">☁️ SKY TV</div>
-        <div class="sub">PREMIUM IPTV</div>
     </div>
 
     <button onclick="loadChannels()">📺 CHARGER LES CHAÎNES</button>
@@ -28,43 +26,32 @@
     <video id="video" controls></video>
 
     <script>
-        // REMPLACEZ PAR VOTRE VRAIE URL PHP
-        const API_URL = "https://VOTRE-DOMAINE.epizy.com/api.php";
+        const API_URL = "https://skytv-proxy.onrender.com/channels";
         
         async function loadChannels() {
             const listDiv = document.getElementById('list');
-            listDiv.innerHTML = '<div class="loading">⏳ Connexion à SKY TV...</div>';
+            listDiv.innerHTML = '<div class="loading">⏳ Chargement...</div>';
             
             try {
                 const response = await fetch(API_URL);
-                const data = await response.json();
+                const channels = await response.json();
                 
-                if (data.error) {
-                    throw new Error(data.error);
-                }
-                
-                if (!Array.isArray(data) || data.length === 0) {
-                    throw new Error('Aucune chaîne trouvée');
-                }
+                if (channels.error) throw new Error(channels.error);
                 
                 listDiv.innerHTML = '';
-                data.forEach(ch => {
+                channels.forEach(ch => {
                     const div = document.createElement('div');
                     div.className = 'channel';
                     div.innerText = ch.name;
-                    div.onclick = () => playChannel(ch.stream_id);
+                    div.onclick = () => {
+                        document.getElementById('video').src = ch.stream_url;
+                        document.getElementById('video').play();
+                    };
                     listDiv.appendChild(div);
                 });
-                
             } catch(e) {
                 listDiv.innerHTML = `<div class="error">❌ ${e.message}</div>`;
             }
-        }
-        
-        function playChannel(streamId) {
-            const video = document.getElementById('video');
-            video.src = `https://VOTRE-DOMAINE.epizy.com/stream.php?id=${streamId}`;
-            video.play();
         }
     </script>
 </body>
