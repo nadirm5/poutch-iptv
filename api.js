@@ -8,40 +8,74 @@ app.use((req, res, next) => {
     next();
 });
 
-app.get('/proxy', async (req, res) => {
-    const targetUrl = req.query.url;
-    if (!targetUrl) {
-        return res.status(400).json({ error: 'Missing url parameter' });
-    }
+app.get('/', async (req, res) => {
+    const server = req.query.server;
+    const user = req.query.user;
+    const pass = req.query.pass;
+    const m3u = req.query.m3u;
     
-    try {
-        const response = await fetch(targetUrl);
-        const data = await response.text();
-        res.send(data);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
+    // Mode Xtream
+    if (server && user && pass) {
+        try {
+            const apiUrl = `${server}/player_api.php?username=${user}&password=${pass}`;
+            const response = await fetch(apiUrl);
+            const data = await response.json();
+            
+            let channels = [];
+            
+            if (data.live) {
+                data.live.forEach(ch => {
+                    channels.push({
+                        name: ch.name,
+                        url: `${server}/live/${user}/${pass}/${ch.stream_id}.ts`,
+                        group: ch.category_name || 'Chaînes'
+                    });
+                });
+            }
+            
+            if (data.vod) {
+                data.vod.forEach(m => {
+                    channels.push({
+                        name: m.name,
+                        url: `${server}/movie/${user}/${pass}/${m.stream_id}.mp4`,
+                        group: m.category_name || 'Films'
+                    });
+                });
+            }
+            
+            res.json(channels);
+        } catch(e) {
+            res.json({ error: e.message });
+        }
     }
-});
-
-app.get('/channels', async (req, res) => {
-    const server = "http://binqrzgi.sidiman.com";
-    const user = "YWR48WA";
-    const pass = "EQU8TG3";
-    
-    try {
-        const apiUrl = `${server}/player_api.php?username=${user}&password=${pass}&action=get_live_streams`;
-        const response = await fetch(apiUrl);
-        const data = await response.json();
-        
-        const channels = data.map(ch => ({
-            name: ch.name,
-            stream_id: ch.stream_id,
-            stream_url: `${server}/live/${user}/${pass}/${ch.stream_id}.ts`
-        }));
-        
-        res.json(channels);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
+    // Mode M3U
+    else if (m3u) {
+        try {
+            const response = await fetch(m3u);
+            const content = await response.text();
+            const lines = content.split('\n');
+            const channels = [];
+            
+            for (let i = 0; i < lines.length; i++) {
+                let line = lines[i].trim();
+                if (line.startsWith('#EXTINF:')) {
+                    let name = line.split(',')[1] || 'Chaîne';
+                    let url = lines[i+1] ? lines[i+1].trim() : '';
+                    if (url && url.startsWith('http')) {
+                        channels.push({
+                            name: name,
+                            url: url,
+                            group: 'Chaînes'
+                        });
+                    }
+                }
+            }
+            res.json(channels);
+        } catch(e) {
+            res.json({ error: e.message });
+        }
+    } else {
+        res.json({ error: 'Missing parameters' });
     }
 });
 
