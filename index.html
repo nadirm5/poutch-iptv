@@ -2,8 +2,9 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>NXT IPTV | Ultimate Experience</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>SKY TV | Premium IPTV</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,118 +13,169 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #000000;
-            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0A0A1A 0%, #0F0F2A 100%);
+            color: #fff;
+            min-height: 100vh;
         }
 
-        /* Header Premium */
-        .premium-header {
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+        /* Header Sky Premium */
+        .sky-header {
+            background: linear-gradient(135deg, #0A0A2A 0%, #0F0F3A 100%);
             padding: 25px 20px;
-            text-align: center;
+            border-bottom: 2px solid rgba(0, 191, 255, 0.3);
             position: relative;
-            border-bottom: 1px solid rgba(255,71,87,0.3);
+            overflow: hidden;
         }
 
-        .logo-icon {
-            font-size: 50px;
-            margin-bottom: 5px;
+        .sky-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -30%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0,191,255,0.1) 0%, transparent 70%);
+            pointer-events: none;
         }
 
-        .app-name {
-            font-size: 36px;
+        .sky-header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo-sky {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .sky-icon {
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(135deg, #00BFFF, #1E90FF);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            box-shadow: 0 10px 25px rgba(0,191,255,0.4);
+        }
+
+        .sky-text h1 {
+            font-size: 28px;
             font-weight: 800;
-            background: linear-gradient(135deg, #FF4757, #1E90FF);
+            background: linear-gradient(135deg, #00BFFF, #1E90FF);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            letter-spacing: -1px;
+            letter-spacing: -0.5px;
         }
 
-        .app-slogan {
+        .sky-text p {
             font-size: 10px;
-            color: #666;
+            color: #888;
             letter-spacing: 2px;
-            margin-top: 5px;
+        }
+
+        .badge-sky {
+            background: rgba(0,191,255,0.2);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #00BFFF;
+            border: 1px solid rgba(0,191,255,0.3);
         }
 
         /* Navigation */
-        .nav-bar {
-            display: flex;
-            background: #111;
-            padding: 12px 15px;
-            gap: 8px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+        .nav-sky {
+            padding: 15px 20px 0 20px;
         }
 
-        .nav-item {
+        .nav-items-sky {
+            display: flex;
+            gap: 10px;
+            background: rgba(10,10,30,0.8);
+            padding: 6px;
+            border-radius: 60px;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-sky-item {
             flex: 1;
-            text-align: center;
             padding: 12px 8px;
-            border-radius: 30px;
+            text-align: center;
+            border-radius: 50px;
             font-weight: 600;
             font-size: 12px;
             cursor: pointer;
             color: #888;
-            background: #1a1a2a;
             transition: all 0.3s;
         }
 
-        .nav-item.active {
-            background: linear-gradient(135deg, #FF4757, #1E90FF);
+        .nav-sky-item.active {
+            background: linear-gradient(135deg, #00BFFF, #1E90FF);
             color: white;
-            box-shadow: 0 4px 15px rgba(255,71,87,0.3);
+            box-shadow: 0 4px 15px rgba(0,191,255,0.3);
         }
 
         /* Login Card */
-        .login-card {
+        .login-sky {
             margin: 20px;
             padding: 25px;
-            background: rgba(26, 26, 46, 0.9);
-            border-radius: 25px;
-            border: 1px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
+            background: rgba(10,10,30,0.8);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            border: 1px solid rgba(0,191,255,0.2);
         }
 
-        .login-title {
+        .login-sky h2 {
             font-size: 22px;
-            font-weight: 700;
             margin-bottom: 5px;
+            background: linear-gradient(135deg, #00BFFF, #fff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
 
-        .login-sub {
+        .login-sky p {
             font-size: 12px;
-            color: #888;
+            color: #666;
             margin-bottom: 20px;
         }
 
-        .input-premium {
+        .input-sky {
             width: 100%;
             padding: 15px;
-            background: #0a0a0a;
-            border: 1px solid #2a2a3a;
-            border-radius: 15px;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(0,191,255,0.3);
+            border-radius: 20px;
             color: white;
             font-size: 14px;
             margin-bottom: 12px;
+            transition: all 0.3s;
         }
 
-        .input-premium:focus {
+        .input-sky:focus {
             outline: none;
-            border-color: #FF4757;
+            border-color: #00BFFF;
+            box-shadow: 0 0 10px rgba(0,191,255,0.2);
         }
 
-        .mode-selector {
+        .mode-sky {
             display: flex;
             gap: 10px;
-            margin: 15px 0;
-            background: #0a0a0a;
+            margin: 20px 0;
+            background: rgba(0,0,0,0.5);
             padding: 5px;
             border-radius: 50px;
         }
 
-        .mode-option {
+        .mode-sky-option {
             flex: 1;
             padding: 12px;
             text-align: center;
@@ -134,15 +186,15 @@
             color: #888;
         }
 
-        .mode-option.active {
-            background: linear-gradient(135deg, #FF4757, #1E90FF);
+        .mode-sky-option.active {
+            background: linear-gradient(135deg, #00BFFF, #1E90FF);
             color: white;
         }
 
-        .btn-connect {
+        .btn-sky {
             width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #FF4757, #1E90FF);
+            padding: 16px;
+            background: linear-gradient(135deg, #00BFFF, #1E90FF);
             border: none;
             border-radius: 50px;
             color: white;
@@ -150,70 +202,79 @@
             font-size: 16px;
             cursor: pointer;
             margin-top: 10px;
+            transition: transform 0.2s;
+        }
+
+        .btn-sky:active {
+            transform: scale(0.98);
         }
 
         /* Content Area */
-        .content-area {
+        .content-sky {
             padding: 15px;
             max-height: 55vh;
             overflow-y: auto;
         }
 
-        .category-section {
-            margin-bottom: 20px;
+        .category-sky {
+            margin-bottom: 25px;
         }
 
-        .category-header {
+        .category-sky-header {
             display: flex;
             justify-content: space-between;
-            padding: 8px 12px;
-            background: rgba(255,71,87,0.1);
-            border-radius: 12px;
-            margin-bottom: 10px;
+            align-items: center;
+            padding: 10px 15px;
+            background: rgba(0,191,255,0.1);
+            border-radius: 15px;
+            margin-bottom: 12px;
+            border-left: 3px solid #00BFFF;
         }
 
-        .category-name {
-            font-weight: bold;
+        .category-sky-name {
+            font-weight: 700;
             font-size: 14px;
-            color: #FF4757;
+            color: #00BFFF;
         }
 
-        .channels-grid {
+        .channels-sky-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            gap: 10px;
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            gap: 12px;
         }
 
-        .channel-card {
-            background: #1a1a2a;
-            border-radius: 12px;
+        .channel-sky-card {
+            background: rgba(20,20,50,0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 18px;
             padding: 12px 8px;
             text-align: center;
             cursor: pointer;
             transition: all 0.2s;
-            border: 1px solid rgba(255,255,255,0.05);
+            border: 1px solid rgba(0,191,255,0.2);
         }
 
-        .channel-card:active {
-            transform: scale(0.96);
-            background: #FF4757;
+        .channel-sky-card:active {
+            transform: scale(0.95);
+            background: rgba(0,191,255,0.2);
+            border-color: #00BFFF;
         }
 
-        .channel-icon {
-            font-size: 28px;
-            margin-bottom: 5px;
+        .channel-sky-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
         }
 
-        .channel-name {
-            font-size: 10px;
+        .channel-sky-name {
+            font-size: 11px;
             font-weight: 500;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        /* Player Modal */
-        .player-modal {
+        /* Player Modal Premium */
+        .player-sky-modal {
             position: fixed;
             top: 0;
             left: 0;
@@ -225,32 +286,34 @@
             flex-direction: column;
         }
 
-        .player-modal.active {
+        .player-sky-modal.active {
             display: flex;
         }
 
-        .player-header {
+        .player-sky-header {
             padding: 15px 20px;
-            background: linear-gradient(135deg, #0a0a0a, #1a1a2e);
+            background: linear-gradient(135deg, #0A0A2A, #0F0F3A);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .player-title {
-            font-weight: bold;
+        .player-sky-title {
+            font-weight: 700;
             font-size: 14px;
+            color: #00BFFF;
         }
 
-        .player-close {
-            width: 36px;
-            height: 36px;
-            background: rgba(255,71,87,0.2);
+        .player-sky-close {
+            width: 40px;
+            height: 40px;
+            background: rgba(0,191,255,0.2);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
+            font-size: 20px;
         }
 
         video {
@@ -259,91 +322,139 @@
             background: #000;
         }
 
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #FF4757;
+        /* Settings */
+        .settings-sky-panel {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #0F0F2A, #0A0A1A);
+            border-radius: 30px 30px 0 0;
+            padding: 25px;
+            z-index: 200;
+            display: none;
+            border-top: 1px solid rgba(0,191,255,0.3);
         }
 
-        .error {
+        .settings-sky-panel.active {
+            display: block;
+        }
+
+        .settings-sky-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #00BFFF;
+        }
+
+        .setting-sky-item {
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .loading-sky {
+            text-align: center;
+            padding: 40px;
+            color: #00BFFF;
+        }
+
+        .error-sky {
             text-align: center;
             padding: 30px;
             color: #FF4757;
             background: rgba(255,71,87,0.1);
-            border-radius: 15px;
+            border-radius: 20px;
             margin: 15px;
         }
     </style>
 </head>
 <body>
 
-    <div class="premium-header">
-        <div class="logo-icon">⚡</div>
-        <div class="app-name" id="appName">NXT</div>
-        <div class="app-slogan" id="appSlogan">ULTIMATE IPTV EXPERIENCE</div>
+    <div class="sky-header">
+        <div class="sky-header-content">
+            <div class="logo-sky">
+                <div class="sky-icon">☁️</div>
+                <div class="sky-text">
+                    <h1>SKY TV</h1>
+                    <p>PREMIUM IPTV EXPERIENCE</p>
+                </div>
+            </div>
+            <div class="badge-sky" onclick="openSettings()">⚙️ SETTINGS</div>
+        </div>
     </div>
 
-    <div class="nav-bar">
-        <div class="nav-item active" onclick="switchTab('channels')">📺 CHAÎNES</div>
-        <div class="nav-item" onclick="switchTab('movies')">🎬 FILMS</div>
-        <div class="nav-item" onclick="switchTab('series')">📺 SÉRIES</div>
-        <div class="nav-item" onclick="switchTab('favorites')">⭐ FAVORIS</div>
+    <div class="nav-sky">
+        <div class="nav-items-sky">
+            <div class="nav-sky-item active" onclick="switchTab('channels')">📺 CHAÎNES</div>
+            <div class="nav-sky-item" onclick="switchTab('movies')">🎬 FILMS</div>
+            <div class="nav-sky-item" onclick="switchTab('series')">📺 SÉRIES</div>
+            <div class="nav-sky-item" onclick="switchTab('favorites')">⭐ FAVORIS</div>
+        </div>
     </div>
 
-    <div id="loginCard" class="login-card">
-        <div class="login-title">✨ Connexion</div>
-        <div class="login-sub">Entrez vos identifiants IPTV</div>
+    <div id="loginCard" class="login-sky">
+        <h2>✨ Connexion SKY TV</h2>
+        <p>Entrez vos identifiants IPTV</p>
         
-        <input type="text" id="serverUrl" class="input-premium" placeholder="URL du serveur (ex: http://ip:8080)">
-        <input type="text" id="username" class="input-premium" placeholder="Nom d'utilisateur">
-        <input type="password" id="password" class="input-premium" placeholder="Mot de passe">
+        <input type="text" id="serverUrl" class="input-sky" placeholder="URL du serveur (ex: http://ip:8080)">
+        <input type="text" id="username" class="input-sky" placeholder="Nom d'utilisateur">
+        <input type="password" id="password" class="input-sky" placeholder="Mot de passe">
         
-        <div class="mode-selector">
-            <div class="mode-option active" onclick="switchMode('xtream')">🔑 XTREAM</div>
-            <div class="mode-option" onclick="switchMode('m3u')">📄 M3U</div>
+        <div class="mode-sky">
+            <div class="mode-sky-option active" onclick="switchMode('xtream')">🔑 XTREAM CODES</div>
+            <div class="mode-sky-option" onclick="switchMode('m3u')">📄 M3U PLAYLIST</div>
         </div>
         
         <div id="m3uField" style="display: none;">
-            <input type="text" id="m3uUrl" class="input-premium" placeholder="Lien M3U">
+            <input type="text" id="m3uUrl" class="input-sky" placeholder="Lien M3U">
         </div>
         
-        <button class="btn-connect" onclick="connect()">🔌 SE CONNECTER</button>
+        <button class="btn-sky" onclick="connect()">🔌 SE CONNECTER</button>
     </div>
 
-    <div id="contentArea" class="content-area">
-        <div class="loading">✨ Entrez vos identifiants</div>
+    <div id="contentArea" class="content-sky">
+        <div class="loading-sky">✨ Bienvenue sur SKY TV</div>
     </div>
 
-    <div id="playerModal" class="player-modal">
-        <div class="player-header">
-            <span class="player-title" id="playerTitle">Lecture</span>
-            <div class="player-close" onclick="closePlayer()">✕</div>
+    <div id="playerModal" class="player-sky-modal">
+        <div class="player-sky-header">
+            <span class="player-sky-title" id="playerTitle">SKY TV Player</span>
+            <div class="player-sky-close" onclick="closePlayer()">✕</div>
         </div>
         <video id="videoPlayer" controls></video>
     </div>
 
+    <div id="settingsPanel" class="settings-sky-panel">
+        <div class="settings-sky-title">⚙️ Paramètres SKY TV</div>
+        <div class="setting-sky-item" onclick="clearFavorites()">
+            <span>⭐ Effacer les favoris</span>
+            <span>🗑️</span>
+        </div>
+        <div class="setting-sky-item" onclick="resetAll()">
+            <span>🔄 Réinitialiser tout</span>
+            <span>⚠️</span>
+        </div>
+        <button class="btn-sky" style="margin-top: 20px;" onclick="closeSettings()">Fermer</button>
+    </div>
+
     <script>
-        let channels = [], movies = [], series = [], favorites = JSON.parse(localStorage.getItem('app_fav') || '[]');
+        let channels = [], movies = [], series = [], favorites = JSON.parse(localStorage.getItem('skytv_fav') || '[]');
         let currentTab = 'channels', currentMode = 'xtream';
 
-        // Configuration du nom - CHANGEZ ICI VOS 3 LETTRES
-        const APP_NAME = "NXT";  // ← METTEZ VOS 3 LETTRES ICI
-        const APP_SLOGAN = "ULTIMATE IPTV EXPERIENCE";
-
-        document.getElementById('appName').innerText = APP_NAME;
-        document.getElementById('appSlogan').innerText = APP_SLOGAN;
-        document.title = APP_NAME + " IPTV";
-
-        function switchMode(mode) {
+        async function switchMode(mode) {
             currentMode = mode;
-            document.querySelectorAll('.mode-option').forEach(opt => opt.classList.remove('active'));
+            document.querySelectorAll('.mode-sky-option').forEach(opt => opt.classList.remove('active'));
             event.target.classList.add('active');
             document.getElementById('m3uField').style.display = mode === 'm3u' ? 'block' : 'none';
         }
 
         async function connect() {
             const contentDiv = document.getElementById('contentArea');
-            contentDiv.innerHTML = '<div class="loading">🔄 Connexion...</div>';
+            contentDiv.innerHTML = '<div class="loading-sky">🔄 Connexion à SKY TV...</div>';
             
             try {
                 if (currentMode === 'xtream') {
@@ -361,7 +472,7 @@
                 saveCredentials();
                 displayContent();
             } catch(e) {
-                contentDiv.innerHTML = `<div class="error">❌ ${e.message}</div>`;
+                contentDiv.innerHTML = `<div class="error-sky">❌ ${e.message}</div>`;
             }
         }
 
@@ -377,7 +488,7 @@
                 } catch(e) { continue; }
             }
             
-            if (!data) throw new Error('Impossible de se connecter');
+            if (!data) throw new Error('Impossible de se connecter au serveur');
             
             channels = data.live?.map(ch => ({
                 name: ch.name,
@@ -403,7 +514,7 @@
                 } catch(e) { continue; }
             }
             
-            if (!content) throw new Error('Impossible de charger');
+            if (!content) throw new Error('Impossible de charger la playlist');
             
             channels = [];
             const lines = content.split('\n');
@@ -434,22 +545,22 @@
             
             let html = '';
             for (let g in groups) {
-                html += `<div class="category-section">
-                    <div class="category-header">
-                        <span class="category-name">${g}</span>
+                html += `<div class="category-sky">
+                    <div class="category-sky-header">
+                        <span class="category-sky-name">${g}</span>
                         <span>${groups[g].length}</span>
                     </div>
-                    <div class="channels-grid">`;
+                    <div class="channels-sky-grid">`;
                 groups[g].forEach(item => {
                     const isFav = favorites.includes(item.name);
-                    html += `<div class="channel-card" onclick="playItem('${item.url}', '${item.name.replace(/'/g, "\\'")}')">
-                        <div class="channel-icon">${isFav ? '⭐' : '📺'}</div>
-                        <div class="channel-name">${item.name}</div>
+                    html += `<div class="channel-sky-card" onclick="playItem('${item.url}', '${item.name.replace(/'/g, "\\'")}')">
+                        <div class="channel-sky-icon">${isFav ? '⭐' : '📺'}</div>
+                        <div class="channel-sky-name">${item.name}</div>
                     </div>`;
                 });
                 html += `</div></div>`;
             }
-            document.getElementById('contentArea').innerHTML = html || '<div class="loading">📭 Aucun contenu</div>';
+            document.getElementById('contentArea').innerHTML = html || '<div class="loading-sky">📭 Aucun contenu</div>';
         }
 
         function playItem(url, name) {
@@ -470,34 +581,48 @@
 
         function switchTab(tab) {
             currentTab = tab;
-            document.querySelectorAll('.nav-item').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.nav-sky-item').forEach(t => t.classList.remove('active'));
             event.target.classList.add('active');
             displayContent();
         }
 
+        function openSettings() { document.getElementById('settingsPanel').classList.add('active'); }
+        function closeSettings() { document.getElementById('settingsPanel').classList.remove('active'); }
+        
+        function clearFavorites() {
+            favorites = [];
+            localStorage.setItem('skytv_fav', '[]');
+            if (currentTab === 'favorites') displayContent();
+        }
+        
+        function resetAll() {
+            localStorage.clear();
+            location.reload();
+        }
+        
         function saveCredentials() {
-            localStorage.setItem('app_mode', currentMode);
+            localStorage.setItem('skytv_mode', currentMode);
             if (currentMode === 'xtream') {
-                localStorage.setItem('app_server', document.getElementById('serverUrl').value);
-                localStorage.setItem('app_user', document.getElementById('username').value);
+                localStorage.setItem('skytv_server', document.getElementById('serverUrl').value);
+                localStorage.setItem('skytv_user', document.getElementById('username').value);
             } else {
-                localStorage.setItem('app_m3u', document.getElementById('m3uUrl').value);
+                localStorage.setItem('skytv_m3u', document.getElementById('m3uUrl').value);
             }
         }
-
-        // Auto-load
-        const savedMode = localStorage.getItem('app_mode');
+        
+        // Auto-load saved credentials
+        const savedMode = localStorage.getItem('skytv_mode');
         if (savedMode) {
             if (savedMode === 'xtream') {
-                const s = localStorage.getItem('app_server');
-                const u = localStorage.getItem('app_user');
+                const s = localStorage.getItem('skytv_server');
+                const u = localStorage.getItem('skytv_user');
                 if (s && u) {
                     document.getElementById('serverUrl').value = s;
                     document.getElementById('username').value = u;
                     connect();
                 }
             } else {
-                const m = localStorage.getItem('app_m3u');
+                const m = localStorage.getItem('skytv_m3u');
                 if (m) {
                     document.getElementById('m3uUrl').value = m;
                     connect();
