@@ -2,8 +2,8 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>ORION TV PRO - IPTV Premium</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>NXT IPTV | Ultimate Experience</title>
     <style>
         * {
             margin: 0;
@@ -13,111 +13,138 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0a0a0a;
+            background: #000000;
             color: #ffffff;
         }
 
-        /* Header */
-        .header {
-            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+        /* Header Premium */
+        .premium-header {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            padding: 25px 20px;
+            text-align: center;
+            position: relative;
+            border-bottom: 1px solid rgba(255,71,87,0.3);
         }
 
-        .logo {
-            font-size: 22px;
+        .logo-icon {
+            font-size: 50px;
+            margin-bottom: 5px;
+        }
+
+        .app-name {
+            font-size: 36px;
             font-weight: 800;
-            background: linear-gradient(135deg, #ff4757, #1e90ff);
+            background: linear-gradient(135deg, #FF4757, #1E90FF);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+            letter-spacing: -1px;
         }
 
-        .menu-icons {
-            display: flex;
-            gap: 20px;
+        .app-slogan {
+            font-size: 10px;
+            color: #666;
+            letter-spacing: 2px;
+            margin-top: 5px;
         }
 
-        .menu-icons span {
-            font-size: 22px;
-            cursor: pointer;
-        }
-
-        /* Onglets */
-        .tabs {
+        /* Navigation */
+        .nav-bar {
             display: flex;
             background: #111;
-            padding: 10px 15px;
-            gap: 10px;
-            border-bottom: 1px solid #222;
+            padding: 12px 15px;
+            gap: 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
 
-        .tab {
+        .nav-item {
             flex: 1;
             text-align: center;
-            padding: 12px;
+            padding: 12px 8px;
             border-radius: 30px;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 12px;
             cursor: pointer;
+            color: #888;
+            background: #1a1a2a;
             transition: all 0.3s;
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, #FF4757, #1E90FF);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255,71,87,0.3);
+        }
+
+        /* Login Card */
+        .login-card {
+            margin: 20px;
+            padding: 25px;
+            background: rgba(26, 26, 46, 0.9);
+            border-radius: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .login-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .login-sub {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 20px;
+        }
+
+        .input-premium {
+            width: 100%;
+            padding: 15px;
+            background: #0a0a0a;
+            border: 1px solid #2a2a3a;
+            border-radius: 15px;
+            color: white;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .input-premium:focus {
+            outline: none;
+            border-color: #FF4757;
+        }
+
+        .mode-selector {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            background: #0a0a0a;
+            padding: 5px;
+            border-radius: 50px;
+        }
+
+        .mode-option {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
             color: #888;
         }
 
-        .tab.active {
-            background: linear-gradient(135deg, #ff4757, #1e90ff);
+        .mode-option.active {
+            background: linear-gradient(135deg, #FF4757, #1E90FF);
             color: white;
-        }
-
-        /* Zone de connexion */
-        .login-section {
-            padding: 20px;
-            background: #0f0f1a;
-        }
-
-        .url-input {
-            width: 100%;
-            padding: 15px;
-            background: #1a1a2e;
-            border: 1px solid #2a2a3e;
-            border-radius: 15px;
-            color: white;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-
-        .url-input:focus {
-            outline: none;
-            border-color: #ff4757;
-        }
-
-        .login-row {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-
-        .login-row input {
-            flex: 1;
-            padding: 15px;
-            background: #1a1a2e;
-            border: 1px solid #2a2a3e;
-            border-radius: 15px;
-            color: white;
-            font-size: 14px;
         }
 
         .btn-connect {
             width: 100%;
             padding: 15px;
-            background: linear-gradient(135deg, #ff4757, #1e90ff);
+            background: linear-gradient(135deg, #FF4757, #1E90FF);
             border: none;
-            border-radius: 15px;
+            border-radius: 50px;
             color: white;
             font-weight: bold;
             font-size: 16px;
@@ -125,116 +152,67 @@
             margin-top: 10px;
         }
 
-        .btn-connect:active {
-            transform: scale(0.98);
-        }
-
-        /* Mode switch */
-        .mode-switch {
-            display: flex;
-            gap: 5px;
-            margin-top: 15px;
-            background: #1a1a2e;
-            border-radius: 30px;
-            padding: 5px;
-        }
-
-        .mode-btn {
-            flex: 1;
-            padding: 10px;
-            text-align: center;
-            border-radius: 25px;
-            font-size: 12px;
-            cursor: pointer;
-            background: transparent;
-            color: #888;
-        }
-
-        .mode-btn.active {
-            background: #ff4757;
-            color: white;
-        }
-
-        /* Recherche */
-        .search-bar {
+        /* Content Area */
+        .content-area {
             padding: 15px;
-            background: #0f0f1a;
-            display: none;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 12px 15px;
-            background: #1a1a2e;
-            border: none;
-            border-radius: 30px;
-            color: white;
-            font-size: 14px;
-        }
-
-        /* Contenu */
-        .content {
-            padding: 15px;
-            max-height: 60vh;
+            max-height: 55vh;
             overflow-y: auto;
         }
 
-        .category {
+        .category-section {
             margin-bottom: 20px;
         }
 
-        .category-title {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 12px;
-            padding-left: 5px;
-            border-left: 3px solid #ff4757;
-        }
-
-        .items-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 12px;
-        }
-
-        .item-card {
-            background: #1a1a2e;
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 12px;
+            background: rgba(255,71,87,0.1);
             border-radius: 12px;
-            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .category-name {
+            font-weight: bold;
+            font-size: 14px;
+            color: #FF4757;
+        }
+
+        .channels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+        }
+
+        .channel-card {
+            background: #1a1a2a;
+            border-radius: 12px;
+            padding: 12px 8px;
+            text-align: center;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: all 0.2s;
+            border: 1px solid rgba(255,255,255,0.05);
         }
 
-        .item-card:active {
-            transform: scale(0.97);
+        .channel-card:active {
+            transform: scale(0.96);
+            background: #FF4757;
         }
 
-        .item-poster {
-            width: 100%;
-            aspect-ratio: 2/3;
-            object-fit: cover;
-            background: #2a2a3e;
+        .channel-icon {
+            font-size: 28px;
+            margin-bottom: 5px;
         }
 
-        .item-info {
-            padding: 10px;
-        }
-
-        .item-name {
-            font-size: 12px;
+        .channel-name {
+            font-size: 10px;
             font-weight: 500;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        .item-type {
-            font-size: 10px;
-            color: #ff4757;
-            margin-top: 4px;
-        }
-
-        /* Player modal */
+        /* Player Modal */
         .player-modal {
             position: fixed;
             top: 0;
@@ -252,437 +230,280 @@
         }
 
         .player-header {
-            padding: 15px;
+            padding: 15px 20px;
+            background: linear-gradient(135deg, #0a0a0a, #1a1a2e);
             display: flex;
             justify-content: space-between;
-            background: #111;
+            align-items: center;
         }
 
-        .close-player {
-            font-size: 24px;
+        .player-title {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .player-close {
+            width: 36px;
+            height: 36px;
+            background: rgba(255,71,87,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
-        }
-
-        .player-video {
-            flex: 1;
-            width: 100%;
         }
 
         video {
             width: 100%;
-            height: 100%;
+            flex: 1;
+            background: #000;
         }
 
-        .episodes-list {
-            background: #111;
-            padding: 10px;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-
-        .episode-item {
-            padding: 12px;
-            margin: 5px 0;
-            background: #1a1a2e;
-            border-radius: 10px;
-            cursor: pointer;
-        }
-
-        /* Settings */
-        .settings-panel {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: #1a1a2e;
-            border-radius: 20px 20px 0 0;
-            padding: 20px;
-            z-index: 200;
-            display: none;
-        }
-
-        .settings-panel.active {
-            display: block;
-        }
-
-        .setting-item {
-            padding: 15px 0;
-            border-bottom: 1px solid #2a2a3e;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        /* Loading */
         .loading {
             text-align: center;
             padding: 40px;
-            color: #ff4757;
+            color: #FF4757;
+        }
+
+        .error {
+            text-align: center;
+            padding: 30px;
+            color: #FF4757;
+            background: rgba(255,71,87,0.1);
+            border-radius: 15px;
+            margin: 15px;
         }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <div class="logo">⚡ ORION TV PRO</div>
-        <div class="menu-icons">
-            <span onclick="openSettings()">⚙️</span>
-            <span onclick="toggleSearch()">🔍</span>
-        </div>
+    <div class="premium-header">
+        <div class="logo-icon">⚡</div>
+        <div class="app-name" id="appName">NXT</div>
+        <div class="app-slogan" id="appSlogan">ULTIMATE IPTV EXPERIENCE</div>
     </div>
 
-    <div class="tabs">
-        <div class="tab active" data-tab="channels" onclick="switchTab('channels')">📺 CHAÎNES</div>
-        <div class="tab" data-tab="movies" onclick="switchTab('movies')">🎬 FILMS</div>
-        <div class="tab" data-tab="series" onclick="switchTab('series')">📺 SÉRIES</div>
-        <div class="tab" data-tab="favorites" onclick="switchTab('favorites')">⭐ FAVORIS</div>
+    <div class="nav-bar">
+        <div class="nav-item active" onclick="switchTab('channels')">📺 CHAÎNES</div>
+        <div class="nav-item" onclick="switchTab('movies')">🎬 FILMS</div>
+        <div class="nav-item" onclick="switchTab('series')">📺 SÉRIES</div>
+        <div class="nav-item" onclick="switchTab('favorites')">⭐ FAVORIS</div>
     </div>
 
-    <div class="login-section" id="loginSection">
-        <input type="text" id="serverUrl" class="url-input" placeholder="URL du serveur (ex: http://votre-serveur:8080)">
-        <div class="login-row">
-            <input type="text" id="username" placeholder="Nom d'utilisateur">
-            <input type="password" id="password" placeholder="Mot de passe">
+    <div id="loginCard" class="login-card">
+        <div class="login-title">✨ Connexion</div>
+        <div class="login-sub">Entrez vos identifiants IPTV</div>
+        
+        <input type="text" id="serverUrl" class="input-premium" placeholder="URL du serveur (ex: http://ip:8080)">
+        <input type="text" id="username" class="input-premium" placeholder="Nom d'utilisateur">
+        <input type="password" id="password" class="input-premium" placeholder="Mot de passe">
+        
+        <div class="mode-selector">
+            <div class="mode-option active" onclick="switchMode('xtream')">🔑 XTREAM</div>
+            <div class="mode-option" onclick="switchMode('m3u')">📄 M3U</div>
         </div>
-        <div class="mode-switch">
-            <div class="mode-btn active" data-mode="m3u" onclick="switchMode('m3u')">📄 Mode M3U</div>
-            <div class="mode-btn" data-mode="xtream" onclick="switchMode('xtream')">🔑 Mode Xtream</div>
+        
+        <div id="m3uField" style="display: none;">
+            <input type="text" id="m3uUrl" class="input-premium" placeholder="Lien M3U">
         </div>
-        <div id="m3uInput" style="display: block; margin-top: 10px;">
-            <input type="text" id="m3uUrl" class="url-input" placeholder="Ou collez votre lien M3U">
-        </div>
+        
         <button class="btn-connect" onclick="connect()">🔌 SE CONNECTER</button>
     </div>
 
-    <div class="search-bar" id="searchBar">
-        <input type="text" id="searchInput" class="search-input" placeholder="🔍 Rechercher..." onkeyup="searchContent()">
-    </div>
-
-    <div id="content" class="content">
-        <div class="loading">✨ Entrez vos identifiants pour commencer</div>
+    <div id="contentArea" class="content-area">
+        <div class="loading">✨ Entrez vos identifiants</div>
     </div>
 
     <div id="playerModal" class="player-modal">
         <div class="player-header">
-            <span id="playerTitle">Lecture</span>
-            <span class="close-player" onclick="closePlayer()">✕</span>
+            <span class="player-title" id="playerTitle">Lecture</span>
+            <div class="player-close" onclick="closePlayer()">✕</div>
         </div>
-        <div class="player-video">
-            <video id="videoPlayer" controls></video>
-        </div>
-        <div id="episodesList" class="episodes-list" style="display: none;"></div>
-    </div>
-
-    <div id="settingsPanel" class="settings-panel">
-        <h3>⚙️ Paramètres</h3>
-        <div class="setting-item">
-            <span>🌐 Langue</span>
-            <select id="languageSelect" onchange="changeLanguage()">
-                <option value="fr">Français</option>
-                <option value="en">English</option>
-                <option value="ar">العربية</option>
-            </select>
-        </div>
-        <div class="setting-item">
-            <span>🎨 Thème</span>
-            <select id="themeSelect" onchange="changeTheme()">
-                <option value="dark">Sombre</option>
-                <option value="light">Clair</option>
-            </select>
-        </div>
-        <div class="setting-item" onclick="clearFavorites()">
-            <span>⭐ Effacer les favoris</span>
-            <span>🗑️</span>
-        </div>
-        <div class="setting-item" onclick="clearAllData()">
-            <span>🔄 Réinitialiser tout</span>
-            <span>⚠️</span>
-        </div>
-        <button class="btn-connect" style="margin-top: 20px;" onclick="closeSettings()">Fermer</button>
+        <video id="videoPlayer" controls></video>
     </div>
 
     <script>
-        let currentData = { channels: [], movies: [], series: [] };
-        let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-        let currentTab = 'channels';
-        let connectionMode = 'm3u';
-        let currentSeries = null;
-        let currentEpisodes = [];
+        let channels = [], movies = [], series = [], favorites = JSON.parse(localStorage.getItem('app_fav') || '[]');
+        let currentTab = 'channels', currentMode = 'xtream';
+
+        // Configuration du nom - CHANGEZ ICI VOS 3 LETTRES
+        const APP_NAME = "NXT";  // ← METTEZ VOS 3 LETTRES ICI
+        const APP_SLOGAN = "ULTIMATE IPTV EXPERIENCE";
+
+        document.getElementById('appName').innerText = APP_NAME;
+        document.getElementById('appSlogan').innerText = APP_SLOGAN;
+        document.title = APP_NAME + " IPTV";
 
         function switchMode(mode) {
-            connectionMode = mode;
-            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelector(`[data-mode="${mode}"]`).classList.add('active');
-            
-            if (mode === 'm3u') {
-                document.getElementById('m3uInput').style.display = 'block';
-            } else {
-                document.getElementById('m3uInput').style.display = 'none';
-            }
+            currentMode = mode;
+            document.querySelectorAll('.mode-option').forEach(opt => opt.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('m3uField').style.display = mode === 'm3u' ? 'block' : 'none';
         }
 
         async function connect() {
-            const contentDiv = document.getElementById('content');
-            contentDiv.innerHTML = '<div class="loading">🔄 Connexion en cours...</div>';
+            const contentDiv = document.getElementById('contentArea');
+            contentDiv.innerHTML = '<div class="loading">🔄 Connexion...</div>';
             
             try {
-                if (connectionMode === 'm3u') {
-                    const m3uUrl = document.getElementById('m3uUrl').value;
-                    if (!m3uUrl) throw new Error('Lien M3U requis');
-                    await loadM3U(m3uUrl);
+                if (currentMode === 'xtream') {
+                    const server = document.getElementById('serverUrl').value;
+                    const user = document.getElementById('username').value;
+                    const pass = document.getElementById('password').value;
+                    if (!server || !user || !pass) throw new Error('Remplissez tous les champs');
+                    await loadXtream(server, user, pass);
                 } else {
-                    const serverUrl = document.getElementById('serverUrl').value;
-                    const username = document.getElementById('username').value;
-                    const password = document.getElementById('password').value;
-                    if (!serverUrl || !username || !password) throw new Error('Tous les champs sont requis');
-                    await loadXtream(serverUrl, username, password);
+                    const m3u = document.getElementById('m3uUrl').value;
+                    if (!m3u) throw new Error('Lien M3U requis');
+                    await loadM3U(m3u);
                 }
-                
-                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('loginCard').style.display = 'none';
                 saveCredentials();
                 displayContent();
-            } catch (error) {
-                contentDiv.innerHTML = `<div class="loading">❌ Erreur: ${error.message}</div>`;
-            }
-        }
-
-        async function loadM3U(url) {
-            const proxyUrl = 'https://api.allorigins.win/raw?url=';
-            const response = await fetch(proxyUrl + encodeURIComponent(url));
-            const content = await response.text();
-            
-            const lines = content.split('\n');
-            currentData = { channels: [], movies: [], series: [] };
-            
-            for (let i = 0; i < lines.length; i++) {
-                let line = lines[i].trim();
-                if (line.startsWith('#EXTINF:')) {
-                    let info = line.substring(8);
-                    let groupMatch = info.match(/group-title="([^"]*)"/);
-                    let name = info.split(',')[1] || 'Sans nom';
-                    let url = lines[i + 1] ? lines[i + 1].trim() : '';
-                    let group = groupMatch ? groupMatch[1] : '';
-                    
-                    if (url && url.startsWith('http')) {
-                        if (group.toLowerCase().includes('film') || group.toLowerCase().includes('movie')) {
-                            currentData.movies.push({ name, url, group, type: 'movie' });
-                        } else if (group.toLowerCase().includes('serie') || group.toLowerCase().includes('series')) {
-                            currentData.series.push({ name, url, group, type: 'series' });
-                        } else {
-                            currentData.channels.push({ name, url, group, type: 'channel' });
-                        }
-                    }
-                }
+            } catch(e) {
+                contentDiv.innerHTML = `<div class="error">❌ ${e.message}</div>`;
             }
         }
 
         async function loadXtream(server, user, pass) {
+            const proxies = ['https://api.allorigins.win/raw?url=', 'https://corsproxy.io/?'];
             const apiUrl = `${server}/player_api.php?username=${user}&password=${pass}`;
-            const response = await fetch(apiUrl);
-            const data = await response.json();
+            let data = null;
             
-            currentData = { channels: [], movies: [], series: [] };
+            for (let proxy of proxies) {
+                try {
+                    const res = await fetch(proxy + encodeURIComponent(apiUrl));
+                    if (res.ok) { data = await res.json(); break; }
+                } catch(e) { continue; }
+            }
             
-            if (data.user_info) {
-                if (data.live) {
-                    currentData.channels = data.live.map(ch => ({
-                        name: ch.name,
-                        url: `${server}/live/${user}/${pass}/${ch.stream_id}.ts`,
-                        group: ch.category_name,
-                        logo: ch.stream_icon,
-                        type: 'channel'
-                    }));
-                }
-                
-                if (data.vod) {
-                    currentData.movies = data.vod.map(m => ({
-                        name: m.name,
-                        url: `${server}/movie/${user}/${pass}/${m.stream_id}.mp4`,
-                        group: m.category_name,
-                        poster: m.stream_icon,
-                        type: 'movie'
-                    }));
-                }
-                
-                if (data.series) {
-                    currentData.series = data.series.map(s => ({
-                        id: s.series_id,
-                        name: s.name,
-                        group: s.category_name,
-                        poster: s.cover,
-                        type: 'series'
-                    }));
+            if (!data) throw new Error('Impossible de se connecter');
+            
+            channels = data.live?.map(ch => ({
+                name: ch.name,
+                url: `${server}/live/${user}/${pass}/${ch.stream_id}.ts`,
+                group: ch.category_name || 'Général'
+            })) || [];
+            
+            movies = data.vod?.map(m => ({
+                name: m.name,
+                url: `${server}/movie/${user}/${pass}/${m.stream_id}.mp4`,
+                group: m.category_name || 'Films'
+            })) || [];
+        }
+
+        async function loadM3U(url) {
+            const proxies = ['https://api.allorigins.win/raw?url=', 'https://corsproxy.io/?'];
+            let content = null;
+            
+            for (let proxy of proxies) {
+                try {
+                    const res = await fetch(proxy + encodeURIComponent(url));
+                    if (res.ok) { content = await res.text(); break; }
+                } catch(e) { continue; }
+            }
+            
+            if (!content) throw new Error('Impossible de charger');
+            
+            channels = [];
+            const lines = content.split('\n');
+            for (let i = 0; i < lines.length; i++) {
+                let line = lines[i].trim();
+                if (line.startsWith('#EXTINF:')) {
+                    let name = line.split(',')[1] || 'Sans nom';
+                    let streamUrl = lines[i+1]?.trim();
+                    if (streamUrl && streamUrl.startsWith('http')) {
+                        channels.push({ name: name, url: streamUrl, group: 'Général' });
+                    }
                 }
             }
         }
 
         function displayContent() {
             let items = [];
-            let title = '';
-            
-            if (currentTab === 'channels') {
-                items = currentData.channels;
-                title = '📺 Chaînes TV';
-            } else if (currentTab === 'movies') {
-                items = currentData.movies;
-                title = '🎬 Films';
-            } else if (currentTab === 'series') {
-                items = currentData.series;
-                title = '📺 Séries';
-            } else if (currentTab === 'favorites') {
-                const favIds = favorites.map(f => f.id);
-                items = [...currentData.channels, ...currentData.movies, ...currentData.series].filter(item => 
-                    favIds.includes(item.name)
-                );
-                title = '⭐ Mes favoris';
-            }
+            if (currentTab === 'channels') items = channels;
+            else if (currentTab === 'movies') items = movies;
+            else if (currentTab === 'favorites') items = [...channels, ...movies].filter(i => favorites.includes(i.name));
             
             const groups = {};
             items.forEach(item => {
-                const group = item.group || 'Général';
-                if (!groups[group]) groups[group] = [];
-                groups[group].push(item);
+                const g = item.group || 'Général';
+                if (!groups[g]) groups[g] = [];
+                groups[g].push(item);
             });
             
             let html = '';
-            for (let group in groups) {
-                html += `<div class="category">`;
-                html += `<div class="category-title">📁 ${group}</div>`;
-                html += `<div class="items-grid">`;
-                groups[group].forEach(item => {
-                    const isFav = favorites.some(f => f.id === item.name);
-                    html += `
-                        <div class="item-card" onclick="playItem(${JSON.stringify(item).replace(/"/g, '&quot;')})">
-                            <div style="position: relative;">
-                                <img class="item-poster" src="${item.poster || item.logo || 'https://via.placeholder.com/200x300?text=No+Image'}" onerror="this.src='https://via.placeholder.com/200x300?text=${encodeURIComponent(item.name.charAt(0))}'">
-                                <span style="position: absolute; top: 5px; right: 5px; font-size: 20px;">${isFav ? '⭐' : '☆'}</span>
-                            </div>
-                            <div class="item-info">
-                                <div class="item-name">${item.name}</div>
-                            </div>
-                        </div>
-                    `;
+            for (let g in groups) {
+                html += `<div class="category-section">
+                    <div class="category-header">
+                        <span class="category-name">${g}</span>
+                        <span>${groups[g].length}</span>
+                    </div>
+                    <div class="channels-grid">`;
+                groups[g].forEach(item => {
+                    const isFav = favorites.includes(item.name);
+                    html += `<div class="channel-card" onclick="playItem('${item.url}', '${item.name.replace(/'/g, "\\'")}')">
+                        <div class="channel-icon">${isFav ? '⭐' : '📺'}</div>
+                        <div class="channel-name">${item.name}</div>
+                    </div>`;
                 });
                 html += `</div></div>`;
             }
-            
-            document.getElementById('content').innerHTML = html || '<div class="loading">📭 Aucun contenu</div>';
+            document.getElementById('contentArea').innerHTML = html || '<div class="loading">📭 Aucun contenu</div>';
         }
 
-        function playItem(item) {
-            const playerModal = document.getElementById('playerModal');
-            const videoPlayer = document.getElementById('videoPlayer');
-            const episodesDiv = document.getElementById('episodesList');
-            
-            document.getElementById('playerTitle').innerText = item.name;
-            
-            if (item.type === 'series' && item.id) {
-                episodesDiv.style.display = 'block';
-                loadEpisodes(item);
-            } else {
-                episodesDiv.style.display = 'none';
-                videoPlayer.src = item.url;
-                videoPlayer.play();
-            }
-            
-            playerModal.classList.add('active');
-        }
-
-        async function loadEpisodes(series) {
-            // Pour Xtream, charger les épisodes
-            const episodesDiv = document.getElementById('episodesList');
-            episodesDiv.innerHTML = '<div class="loading">Chargement...</div>';
-            // Ici logique pour charger les épisodes
+        function playItem(url, name) {
+            const modal = document.getElementById('playerModal');
+            const video = document.getElementById('videoPlayer');
+            document.getElementById('playerTitle').innerText = name;
+            video.src = url;
+            video.play();
+            modal.classList.add('active');
         }
 
         function closePlayer() {
-            const videoPlayer = document.getElementById('videoPlayer');
-            videoPlayer.pause();
-            videoPlayer.src = '';
+            const video = document.getElementById('videoPlayer');
+            video.pause();
+            video.src = '';
             document.getElementById('playerModal').classList.remove('active');
         }
 
         function switchTab(tab) {
             currentTab = tab;
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
             displayContent();
         }
 
-        function toggleSearch() {
-            const searchBar = document.getElementById('searchBar');
-            searchBar.style.display = searchBar.style.display === 'none' ? 'block' : 'none';
-        }
-
-        function searchContent() {
-            const term = document.getElementById('searchInput').value.toLowerCase();
-            // Logique de recherche
-        }
-
-        function openSettings() {
-            document.getElementById('settingsPanel').classList.add('active');
-        }
-
-        function closeSettings() {
-            document.getElementById('settingsPanel').classList.remove('active');
-        }
-
-        function changeLanguage() {
-            const lang = document.getElementById('languageSelect').value;
-            localStorage.setItem('language', lang);
-            // Recharger les textes
-        }
-
-        function changeTheme() {
-            const theme = document.getElementById('themeSelect').value;
-            if (theme === 'light') {
-                document.body.style.background = '#f5f5f5';
-                document.body.style.color = '#000';
-            } else {
-                document.body.style.background = '#0a0a0a';
-                document.body.style.color = '#fff';
-            }
-            localStorage.setItem('theme', theme);
-        }
-
-        function clearFavorites() {
-            favorites = [];
-            localStorage.setItem('favorites', JSON.stringify(favorites));
-            if (currentTab === 'favorites') displayContent();
-        }
-
-        function clearAllData() {
-            localStorage.clear();
-            location.reload();
-        }
-
         function saveCredentials() {
-            if (connectionMode === 'm3u') {
-                localStorage.setItem('m3u_url', document.getElementById('m3uUrl').value);
+            localStorage.setItem('app_mode', currentMode);
+            if (currentMode === 'xtream') {
+                localStorage.setItem('app_server', document.getElementById('serverUrl').value);
+                localStorage.setItem('app_user', document.getElementById('username').value);
             } else {
-                localStorage.setItem('server_url', document.getElementById('serverUrl').value);
-                localStorage.setItem('username', document.getElementById('username').value);
+                localStorage.setItem('app_m3u', document.getElementById('m3uUrl').value);
             }
-            localStorage.setItem('connection_mode', connectionMode);
         }
 
-        // Charger les données sauvegardées
-        const savedMode = localStorage.getItem('connection_mode');
+        // Auto-load
+        const savedMode = localStorage.getItem('app_mode');
         if (savedMode) {
-            connectionMode = savedMode;
-            if (savedMode === 'm3u') {
-                const savedUrl = localStorage.getItem('m3u_url');
-                if (savedUrl) document.getElementById('m3uUrl').value = savedUrl;
+            if (savedMode === 'xtream') {
+                const s = localStorage.getItem('app_server');
+                const u = localStorage.getItem('app_user');
+                if (s && u) {
+                    document.getElementById('serverUrl').value = s;
+                    document.getElementById('username').value = u;
+                    connect();
+                }
             } else {
-                const savedServer = localStorage.getItem('server_url');
-                const savedUser = localStorage.getItem('username');
-                if (savedServer) document.getElementById('serverUrl').value = savedServer;
-                if (savedUser) document.getElementById('username').value = savedUser;
+                const m = localStorage.getItem('app_m3u');
+                if (m) {
+                    document.getElementById('m3uUrl').value = m;
+                    connect();
+                }
             }
-            connect();
         }
-        
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'light') changeTheme();
     </script>
 </body>
 </html>
