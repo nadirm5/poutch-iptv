@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>SKY TV | IPTV Premium</title>
+    <title>SKY TV | Premium IPTV</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: system-ui, sans-serif; background: #0A0A1A; color: white; }
@@ -15,9 +16,6 @@
         .tab.active { background: linear-gradient(135deg, #00BFFF, #1E90FF); color: white; }
         .login-card { margin: 20px; padding: 25px; background: #0F0F2A; border-radius: 25px; }
         input { width: 100%; padding: 14px; margin: 8px 0; background: #1a1a2a; border: 1px solid #2a2a3a; border-radius: 12px; color: white; }
-        .mode-switch { display: flex; gap: 10px; margin: 15px 0; }
-        .mode-btn { flex: 1; padding: 12px; text-align: center; background: #1a1a2a; border-radius: 30px; cursor: pointer; }
-        .mode-btn.active { background: #00BFFF; }
         button { width: 100%; padding: 15px; background: linear-gradient(135deg, #00BFFF, #1E90FF); border: none; border-radius: 30px; color: white; font-weight: bold; cursor: pointer; }
         .channels-area { padding: 15px; max-height: 55vh; overflow-y: auto; }
         .channel-card { background: #1a1a2a; padding: 12px; margin: 5px 0; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 10px; }
@@ -46,14 +44,15 @@
     </div>
 
     <div id="loginCard" class="login-card">
-        <div class="info">📡 Entrez votre lien M3U complet</div>
-        <input type="text" id="m3uUrl" placeholder="Lien M3U complet">
-        <div class="info">📋 Exemple: http://serveur:8080/get.php?username=xxx&password=xxx&type=m3u_plus</div>
+        <div class="info">📡 Entrez vos identifiants Xtream</div>
+        <input type="text" id="serverUrl" placeholder="URL du serveur">
+        <input type="text" id="username" placeholder="Nom d'utilisateur">
+        <input type="password" id="password" placeholder="Mot de passe">
         <button onclick="connect()">🔌 SE CONNECTER</button>
     </div>
 
     <div id="channelsList" class="channels-area">
-        <div class="loading">✨ Entrez votre lien M3U</div>
+        <div class="loading">✨ Entrez vos identifiants</div>
     </div>
 
     <div id="playerModal" class="player-modal">
@@ -68,104 +67,88 @@
         let channels = [], favorites = JSON.parse(localStorage.getItem('skytv_fav') || '[]');
         let currentTab = 'channels';
 
-        // Liste des proxies CORS (plusieurs pour plus de chances)
-        const PROXIES = [
-            'https://api.allorigins.win/raw?url=',
-            'https://corsproxy.io/?',
-            'https://proxy.cors.sh/',
-            'https://cors-anywhere.herokuapp.com/'
-        ];
-
-        async function fetchWithProxy(url) {
-            for (let proxy of PROXIES) {
-                try {
-                    const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), 10000);
-                    const response = await fetch(proxy + encodeURIComponent(url), { signal: controller.signal });
-                    clearTimeout(timeoutId);
-                    if (response.ok) {
-                        const text = await response.text();
-                        return text;
-                    }
-                } catch(e) {
-                    console.log(`Proxy ${proxy} failed:`, e.message);
-                    continue;
-                }
-            }
-            throw new Error('Tous les proxies ont échoué');
-        }
-
         async function connect() {
             const listDiv = document.getElementById('channelsList');
-            const m3uUrl = document.getElementById('m3uUrl').value;
+            const server = document.getElementById('serverUrl').value;
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
             
-            if (!m3uUrl) {
-                listDiv.innerHTML = '<div class="error">❌ Entrez un lien M3U valide</div>';
+            if (!server || !user || !pass) {
+                listDiv.innerHTML = '<div class="error">❌ Remplissez tous les champs</div>';
                 return;
             }
             
             listDiv.innerHTML = '<div class="loading">🔄 Connexion à SKY TV...</div>';
             
+            // Nettoyer l'URL
+            const cleanServer = server.replace(/\/$/, '');
+            
+            // Construire l'URL API
+            const apiUrl = `${cleanServer}/player_api.php?username=${user}&password=${pass}`;
+            
             try {
-                // Télécharger le fichier M3U
-                const content = await fetchWithProxy(m3uUrl);
-                
-                if (!content || !content.startsWith('#EXTM3U')) {
-                    throw new Error('Le lien ne semble pas être une playlist M3U valide');
-                }
-                
-                // Parser le M3U
-                channels = [];
-                const lines = content.split('\n');
-                
-                for (let i = 0; i < lines.length; i++) {
-                    let line = lines[i].trim();
-                    if (line.startsWith('#EXTINF:')) {
-                        // Extraire le nom de la chaîne
-                        let name = line.split(',')[1] || 'Chaîne sans nom';
-                        
-                        // Nettoyer le nom
-                        name = name.replace(/[<>]/g, '').trim();
-                        
-                        // Récupérer l'URL (ligne suivante)
-                        let url = lines[i + 1] ? lines[i + 1].trim() : '';
-                        
-                        // Vérifier que l'URL est valide
-                        if (url && (url.startsWith('http') || url.startsWith('https'))) {
-                            channels.push({
-                                name: name,
-                                url: url,
-                                group: 'Général'
-                            });
-                        }
+                // Utiliser fetch normal (sans proxy) mais avec des headers spécifiques
+                const response = await fetch(apiUrl, {
+                    method: 'GET',
+                    headers: {
+                        'User-Agent': 'IBO Player Pro/1.0 (Android)',
+                        'Origin': cleanServer,
+                        'Referer': cleanServer
                     }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
                 }
                 
-                if (channels.length === 0) {
-                    throw new Error('Aucune chaîne trouvée dans la playlist');
-                }
+                const data = await response.json();
                 
-                // Succès
-                document.getElementById('loginCard').style.display = 'none';
-                localStorage.setItem('skytv_m3u', m3uUrl);
-                displayChannels();
+                if (data.user_info) {
+                    channels = [];
+                    
+                    // Charger les chaînes
+                    if (data.live && data.live.length > 0) {
+                        channels = data.live.map(ch => ({
+                            name: ch.name,
+                            url: `${cleanServer}/live/${user}/${pass}/${ch.stream_id}.ts`,
+                            group: ch.category_name || 'Général'
+                        }));
+                    }
+                    
+                    if (channels.length === 0 && data.vod) {
+                        // Si pas de live, chercher les VOD
+                        channels = data.vod.map(v => ({
+                            name: v.name,
+                            url: `${cleanServer}/movie/${user}/${pass}/${v.stream_id}.mp4`,
+                            group: v.category_name || 'Films'
+                        }));
+                    }
+                    
+                    if (channels.length > 0) {
+                        document.getElementById('loginCard').style.display = 'none';
+                        localStorage.setItem('skytv_server', server);
+                        localStorage.setItem('skytv_user', user);
+                        displayChannels();
+                    } else {
+                        throw new Error('Aucune chaîne trouvée');
+                    }
+                } else {
+                    throw new Error('Identifiants invalides');
+                }
                 
             } catch(e) {
-                listDiv.innerHTML = `<div class="error">❌ ${e.message}<br><br>💡 Vérifiez que votre lien M3U est correct et que votre abonnement est actif.</div>`;
-                console.error(e);
+                listDiv.innerHTML = `<div class="error">❌ Erreur: ${e.message}<br><br>📋 Vérifiez vos identifiants :<br>Serveur: ${cleanServer}<br>User: ${user}</div>`;
             }
         }
 
         function displayChannels() {
-            let html = `<div class="info">📺 ${channels.length} chaînes chargées</div>`;
-            
+            let html = `<div class="info">📺 ${channels.length} chaînes</div>`;
             channels.forEach(ch => {
                 html += `<div class="channel-card" onclick="playChannel('${ch.url.replace(/'/g, "\\'")}')">
                     <span>📺</span>
                     <span>${ch.name}</span>
                 </div>`;
             });
-            
             document.getElementById('channelsList').innerHTML = html;
         }
 
@@ -190,25 +173,14 @@
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             event.target.classList.add('active');
             if (tab === 'channels') displayChannels();
-            else if (tab === 'favorites') displayFavorites();
-        }
-        
-        function displayFavorites() {
-            const favChannels = channels.filter(ch => favorites.includes(ch.name));
-            let html = `<div class="info">⭐ ${favChannels.length} favoris</div>`;
-            favChannels.forEach(ch => {
-                html += `<div class="channel-card" onclick="playChannel('${ch.url.replace(/'/g, "\\'")}')">
-                    <span>⭐</span>
-                    <span>${ch.name}</span>
-                </div>`;
-            });
-            document.getElementById('channelsList').innerHTML = html || '<div class="loading">📭 Aucun favori</div>';
         }
         
         // Chargement auto
-        const savedM3U = localStorage.getItem('skytv_m3u');
-        if (savedM3U) {
-            document.getElementById('m3uUrl').value = savedM3U;
+        const savedServer = localStorage.getItem('skytv_server');
+        const savedUser = localStorage.getItem('skytv_user');
+        if (savedServer && savedUser) {
+            document.getElementById('serverUrl').value = savedServer;
+            document.getElementById('username').value = savedUser;
             connect();
         }
     </script>
