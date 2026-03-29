@@ -1,974 +1,807 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Arich IPTV — Le lecteur IPTV premium pour Android</title>
-  <meta name="description" content="Arich IPTV est un lecteur multimédia premium pour Android. Compatible Xtream Codes et playlists M3U. Apportez votre propre accès, profitez d'un player de qualité." />
-  <meta property="og:title" content="Arich IPTV — Le lecteur IPTV premium" />
-  <meta property="og:description" content="Player IPTV premium pour Android. Compatible Xtream Codes et M3U. Design premium, zapping ultra-rapide." />
-  <meta name="description" content="ARICH IPTV est un lecteur IPTV moderne, rapide et compatible Android TV et mobile. Interface fluide, lecture rapide et configuration simple.">
-  <meta name="keywords" content="iptv lecteur, iptv player, arich iptv, lecteur iptv android tv">
-  <meta name="google-site-verification" content="jirKy2q6VohRM8uXDo8NUFqDf-JzYBiEuX9nPXn4SoQ" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-   <link rel="icon" type="image/x-icon" href="favicon.png">
-  <script defer src="https://cloud.umami.is/script.js" data-website-id="VOTRE-UMAMI-ID" data-domains="arich-iptv.com"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0a0a0f">
+<title>StreamVault</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #13131a;
+    --surface2: #1c1c27;
+    --border: #2a2a3a;
+    --accent: #e8b94f;
+    --accent2: #c47f2a;
+    --text: #f0f0f5;
+    --muted: #7a7a9a;
+    --danger: #e05555;
+    --radius: 10px;
+  }
 
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { height:100%; overflow:hidden; background:var(--bg); color:var(--text); font-family:'DM Sans', sans-serif; }
 
-    :root {
-      --bg:        #000000;
-      --surface:   #111111;
-      --surface2:  #1a1a1a;
-      --surface3:  #242424;
-      --red:       #FF2D55;
-      --violet:    #7B2FFF;
-      --grad:      linear-gradient(135deg, #7B2FFF, #FF2D55);
-      --red-glow:  rgba(255,45,85,0.18);
-      --red-dim:   rgba(255,45,85,0.08);
-      --vio-dim:   rgba(123,47,255,0.10);
-      --blue:      #0A84FF;
-      --gold:      #FFD60A;
-      --green:     #30D158;
-      --text:      #ffffff;
-      --muted:     #8E8E93;
-      --faint:     #3a3a3c;
-      --border:    rgba(255,255,255,0.07);
-      --r:         18px;
-    }
+  /* ---- SCREENS ---- */
+  .screen { position:absolute; inset:0; display:flex; flex-direction:column; transition: opacity .3s, transform .3s; }
+  .screen.hidden { opacity:0; pointer-events:none; transform:translateY(20px); }
 
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      overflow-x: hidden;
-      cursor: none;
-    }
+  /* ---- LOGIN ---- */
+  #loginScreen {
+    justify-content:center; align-items:center; padding:32px 24px;
+    background: radial-gradient(ellipse at 60% 0%, #1e1530 0%, var(--bg) 60%);
+  }
+  .logo { text-align:center; margin-bottom:40px; }
+  .logo h1 { font-family:'Bebas Neue', cursive; font-size:52px; letter-spacing:4px; color:var(--accent); line-height:1; }
+  .logo p { color:var(--muted); font-size:13px; letter-spacing:2px; text-transform:uppercase; margin-top:4px; }
+  .login-card { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:28px 24px; width:100%; max-width:400px; }
+  .field { margin-bottom:16px; }
+  .field label { display:block; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
+  .field input {
+    width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius);
+    padding:12px 14px; color:var(--text); font-size:15px; font-family:inherit; outline:none;
+    transition: border-color .2s;
+  }
+  .field input:focus { border-color:var(--accent); }
+  .btn-primary {
+    width:100%; background:var(--accent); color:#0a0a0f; border:none; border-radius:var(--radius);
+    padding:14px; font-size:15px; font-weight:600; font-family:inherit; cursor:pointer;
+    transition: background .2s, transform .1s; margin-top:8px;
+  }
+  .btn-primary:active { transform:scale(.98); background:var(--accent2); }
+  .error-msg { color:var(--danger); font-size:13px; margin-top:10px; text-align:center; min-height:18px; }
 
-    /* ── CURSOR ─────────────────────────────────────── */
-    #cursor {
-      position: fixed; z-index: 9999; pointer-events: none;
-      width: 10px; height: 10px;
-      background: var(--red);
-      border-radius: 50%;
-      transform: translate(-50%,-50%);
-      transition: transform .12s ease, width .2s, height .2s, background .2s;
-    }
-    #cursor-ring {
-      position: fixed; z-index: 9998; pointer-events: none;
-      width: 36px; height: 36px;
-      border: 1.5px solid rgba(255,45,85,0.5);
-      border-radius: 50%;
-      transform: translate(-50%,-50%);
-      transition: transform .3s ease, width .3s, height .3s, opacity .3s;
-    }
-    body.hovering #cursor { width: 16px; height: 16px; background: white; }
-    body.hovering #cursor-ring { width: 52px; height: 52px; border-color: rgba(123,47,255,0.4); }
+  /* ---- MAIN APP ---- */
+  #appScreen { background:var(--bg); }
 
-    /* ── NAV ─────────────────────────────────────────── */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 48px; height: 68px;
-      background: rgba(0,0,0,0.75);
-      backdrop-filter: blur(24px) saturate(1.6);
-      border-bottom: 1px solid var(--border);
-    }
-    .nav-logo {
-      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px;
-      letter-spacing: -0.5px;
-      display: flex; align-items: center; gap: 10px;
-      text-decoration: none; color: white;
-    }
-    .nav-logo-icon {
-      width: 34px; height: 34px;
-      background: var(--grad);
-      border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 15px;
-      box-shadow: 0 0 20px rgba(123,47,255,0.4);
-    }
-    .nav-links { display: flex; align-items: center; gap: 28px; }
-    .nav-links a { font-size: 14px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color .2s; }
-    .nav-links a:hover { color: white; }
-    .nav-cta {
-      background: var(--grad) !important;
-      color: white !important;
-      padding: 9px 20px; border-radius: 100px;
-      font-weight: 600 !important; font-size: 13px !important;
-      transition: box-shadow .2s, transform .2s !important;
-    }
-    .nav-cta:hover { box-shadow: 0 0 28px rgba(123,47,255,0.45); transform: scale(1.04); }
+  /* TOPBAR */
+  .topbar {
+    display:flex; align-items:center; padding:12px 16px; gap:12px;
+    background:var(--surface); border-bottom:1px solid var(--border); flex-shrink:0;
+  }
+  .topbar .logo-small { font-family:'Bebas Neue'; font-size:24px; color:var(--accent); letter-spacing:2px; }
+  .search-wrap { flex:1; position:relative; }
+  .search-wrap input {
+    width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:50px;
+    padding:9px 14px 9px 36px; color:var(--text); font-size:14px; font-family:inherit; outline:none;
+    transition: border-color .2s;
+  }
+  .search-wrap input:focus { border-color:var(--accent); }
+  .search-wrap .ico-search { position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--muted); font-size:14px; pointer-events:none; }
+  .btn-icon { background:none; border:none; color:var(--muted); font-size:20px; cursor:pointer; padding:4px; }
 
-    .nav-login {
-      display: flex; align-items: center; gap: 8px;
-      padding: 8px 16px; border-radius: 100px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.12);
-      color: rgba(255,255,255,0.8);
-      font-size: 13px; font-weight: 500;
-      text-decoration: none;
-      transition: background .2s, border-color .2s, color .2s, transform .2s;
-      white-space: nowrap;
-    }
-    .nav-login:hover {
-      background: rgba(255,255,255,0.10);
-      border-color: rgba(255,255,255,0.22);
-      color: white; transform: translateY(-1px);
-    }
-    .nav-login svg { opacity: 0.7; flex-shrink: 0; }
-    .nav-login:hover svg { opacity: 1; }
-    .nav-right { display: flex; align-items: center; gap: 10px; }
+  /* CATEGORY TABS */
+  .cat-tabs { display:flex; gap:8px; padding:12px 16px; overflow-x:auto; flex-shrink:0; scrollbar-width:none; }
+  .cat-tabs::-webkit-scrollbar { display:none; }
+  .cat-tab {
+    flex-shrink:0; background:var(--surface2); border:1px solid var(--border); border-radius:50px;
+    padding:7px 16px; font-size:13px; font-family:inherit; color:var(--muted); cursor:pointer;
+    transition: all .2s; white-space:nowrap;
+  }
+  .cat-tab.active { background:var(--accent); border-color:var(--accent); color:#0a0a0f; font-weight:600; }
 
-    /* ── SECTIONS ──────────────────────────────────── */
-    section { padding: 120px 48px; max-width: 1200px; margin: 0 auto; }
+  /* CONTENT GRID */
+  .content-area { flex:1; overflow-y:auto; padding:4px 12px 80px; scrollbar-width:none; }
+  .content-area::-webkit-scrollbar { display:none; }
 
-    /* ── HERO ─────────────────────────────────────── */
-    #hero {
-      min-height: 100vh;
-      display: flex; flex-direction: column; justify-content: center;
-      padding-top: 140px; position: relative; max-width: 100%;
-    }
-    .hero-bg { position: absolute; inset: 0; overflow: hidden; z-index: 0; pointer-events: none; }
-    .hero-glow {
-      position: absolute; width: 700px; height: 700px;
-      background: radial-gradient(circle, rgba(123,47,255,0.10) 0%, transparent 70%);
-      top: -100px; left: -150px;
-      animation: floatGlow 8s ease-in-out infinite alternate;
-    }
-    .hero-glow-2 {
-      width: 500px; height: 500px;
-      background: radial-gradient(circle, rgba(255,45,85,0.08) 0%, transparent 70%);
-      bottom: 0; right: -100px; position: absolute;
-      animation: floatGlow 10s ease-in-out infinite alternate-reverse;
-    }
-    .hero-grid {
-      position: absolute; inset: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-      background-size: 60px 60px;
-      mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 30%, transparent 100%);
-    }
-    @keyframes floatGlow { from { transform: translateY(0) scale(1); } to { transform: translateY(30px) scale(1.1); } }
+  /* Favorites row */
+  .section-title { font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); padding:12px 4px 8px; }
+  .fav-row { display:flex; gap:10px; overflow-x:auto; padding-bottom:8px; scrollbar-width:none; }
+  .fav-row::-webkit-scrollbar { display:none; }
+  .fav-card {
+    flex-shrink:0; width:100px; border-radius:8px; overflow:hidden; cursor:pointer;
+    border:1px solid var(--border); position:relative; background:var(--surface2);
+    transition: transform .2s;
+  }
+  .fav-card:active { transform:scale(.95); }
+  .fav-card img { width:100%; aspect-ratio:2/3; object-fit:cover; display:block; }
+  .fav-card .fav-title { font-size:11px; padding:4px 6px; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
-    .hero-inner {
-      position: relative; z-index: 1;
-      max-width: 1200px; margin: 0 auto; padding: 0 48px;
-      display: grid; grid-template-columns: 1fr 1fr;
-      align-items: center; gap: 80px;
-    }
-    .hero-tag {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: var(--vio-dim); border: 1px solid rgba(123,47,255,0.2);
-      border-radius: 100px; padding: 6px 14px;
-      font-size: 12px; font-weight: 500; color: var(--violet);
-      letter-spacing: 0.5px; margin-bottom: 28px;
-      animation: fadeUp .6s ease both;
-    }
-    .hero-tag-dot {
-      width: 6px; height: 6px; background: var(--violet); border-radius: 50%;
-      animation: pulse-dot 1.8s ease-in-out infinite;
-    }
-    @keyframes pulse-dot { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:.5; transform:scale(0.7); } }
+  /* VOD Grid */
+  .vod-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; padding-top:4px; }
+  @media(min-width:500px){ .vod-grid { grid-template-columns:repeat(4,1fr); } }
+  .vod-card {
+    border-radius:8px; overflow:hidden; cursor:pointer; position:relative;
+    background:var(--surface2); border:1px solid var(--border); transition: transform .2s;
+  }
+  .vod-card:active { transform:scale(.95); }
+  .vod-card img { width:100%; aspect-ratio:2/3; object-fit:cover; display:block; background:#1c1c27; }
+  .vod-card .vod-info { padding:6px 7px 8px; }
+  .vod-card .vod-name { font-size:12px; font-weight:500; line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  .vod-card .vod-rating { font-size:10px; color:var(--accent); margin-top:2px; }
+  .fav-badge {
+    position:absolute; top:5px; right:5px; background:var(--accent); color:#0a0a0f;
+    border-radius:50%; width:18px; height:18px; font-size:10px; display:flex; align-items:center; justify-content:center;
+  }
 
-    h1 {
-      font-family: 'Syne', sans-serif; font-weight: 800;
-      font-size: clamp(40px, 5vw, 68px);
-      line-height: 1.05; letter-spacing: -2px;
-      animation: fadeUp .7s .1s ease both;
-    }
-    h1 .accent { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    h1 .stroke { -webkit-text-stroke: 1.5px rgba(255,255,255,0.35); color: transparent; }
+  /* PROGRESS BAR on vod card */
+  .progress-bar-wrap {
+    position:absolute; bottom:0; left:0; right:0; height:3px; background:rgba(255,255,255,.15);
+  }
+  .progress-bar-fill { height:100%; background:var(--accent); }
 
-    .hero-sub {
-      margin-top: 20px; font-size: 16px; color: var(--muted); line-height: 1.7;
-      max-width: 440px; animation: fadeUp .7s .2s ease both;
-    }
-    .hero-actions {
-      display: flex; align-items: center; gap: 14px;
-      margin-top: 40px; animation: fadeUp .7s .3s ease both;
-      flex-wrap: wrap;
-    }
-    .btn-primary {
-      background: var(--grad); color: white; border: none; cursor: pointer;
-      padding: 14px 28px; border-radius: 100px;
-      font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600;
-      display: flex; align-items: center; gap: 8px; text-decoration: none;
-      transition: box-shadow .2s, transform .2s;
-    }
-    .btn-primary:hover { box-shadow: 0 0 40px rgba(123,47,255,0.45); transform: translateY(-2px); }
-    .btn-secondary {
-      background: transparent; color: var(--muted); border: 1px solid var(--faint);
-      cursor: pointer; padding: 14px 28px; border-radius: 100px;
-      font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500;
-      text-decoration: none; transition: border-color .2s, color .2s, transform .2s;
-    }
-    .btn-secondary:hover { border-color: rgba(255,255,255,0.25); color: white; transform: translateY(-2px); }
+  /* EN COURS ROW */
+  .encours-row { display:flex; gap:10px; overflow-x:auto; padding-bottom:8px; scrollbar-width:none; }
+  .encours-row::-webkit-scrollbar { display:none; }
+  .encours-card {
+    flex-shrink:0; width:130px; border-radius:8px; overflow:hidden; cursor:pointer;
+    border:1px solid var(--border); position:relative; background:var(--surface2);
+    transition: transform .2s;
+  }
+  .encours-card:active { transform:scale(.95); }
+  .encours-card img { width:100%; aspect-ratio:2/3; object-fit:cover; display:block; }
+  .encours-card .encours-info { padding:5px 7px 8px; }
+  .encours-card .encours-name { font-size:11px; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .encours-card .encours-time { font-size:10px; color:var(--accent); margin-top:2px; }
 
-    .hero-login-strip {
-      display: inline-flex; align-items: center; gap: 12px;
-      margin-top: 28px; padding: 12px 18px;
-      background: rgba(123,47,255,0.07);
-      border: 1px solid rgba(123,47,255,0.18);
-      border-radius: 14px; font-size: 14px; color: var(--muted);
-      animation: fadeUp .7s .45s ease both; width: fit-content;
-    }
-    .hero-login-strip a {
-      color: white; font-weight: 600; text-decoration: none;
-      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14);
-      padding: 6px 14px; border-radius: 100px; font-size: 13px;
-      transition: background .2s, border-color .2s, transform .2s;
-      display: flex; align-items: center; gap: 6px;
-    }
-    .hero-login-strip a:hover { background: rgba(255,255,255,0.13); border-color: rgba(255,255,255,0.25); transform: translateY(-1px); }
+  /* LOAD MORE */
+  .load-more-btn {
+    display:block; width:100%; margin:16px 0; background:var(--surface2); border:1px solid var(--border);
+    color:var(--text); padding:12px; border-radius:var(--radius); font-family:inherit; font-size:14px; cursor:pointer;
+    transition: background .2s;
+  }
+  .load-more-btn:active { background:var(--border); }
 
-    .hero-stats { display: flex; gap: 32px; margin-top: 40px; animation: fadeUp .7s .4s ease both; }
-    .hero-stat span:first-child { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: white; }
-    .hero-stat span:last-child { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
+  /* SPINNER */
+  .spinner-wrap { display:flex; justify-content:center; align-items:center; padding:40px; flex-direction:column; gap:12px; }
+  .spinner { width:32px; height:32px; border:3px solid var(--border); border-top-color:var(--accent); border-radius:50%; animation:spin .7s linear infinite; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .spinner-wrap p { color:var(--muted); font-size:13px; }
 
-    /* Mock Phone */
-    .hero-phone { position: relative; animation: fadeUp .8s .2s ease both; display: flex; justify-content: center; }
-    .phone-wrap { position: relative; width: 260px; }
-    .phone-frame {
-      width: 260px; height: 520px; background: var(--surface2);
-      border-radius: 40px; border: 1.5px solid rgba(255,255,255,0.12);
-      overflow: hidden; position: relative;
-      box-shadow: 0 40px 100px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.04), inset 0 1px 0 rgba(255,255,255,0.1);
-    }
-    .phone-notch { width: 100px; height: 28px; background: var(--bg); border-radius: 0 0 20px 20px; margin: 0 auto; position: relative; z-index: 2; }
-    .phone-screen { padding: 12px 14px; }
-    .phone-channel {
-      display: flex; align-items: center; gap: 10px; padding: 10px 12px;
-      background: var(--surface3); border-radius: 12px; margin-bottom: 8px;
-      border: 1px solid var(--border); animation: channelIn 1s ease both;
-    }
-    .phone-channel:nth-child(2) { animation-delay: .15s; }
-    .phone-channel:nth-child(3) { animation-delay: .3s; }
-    .phone-channel:nth-child(4) { animation-delay: .45s; }
-    @keyframes channelIn { from { opacity:0; transform: translateX(-10px); } to { opacity:1; transform: translateX(0); } }
-    .ch-thumb { width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; }
-    .ch-info { flex: 1; min-width: 0; }
-    .ch-name { font-size: 11px; font-weight: 600; color: white; }
-    .ch-cat  { font-size: 9px; color: var(--muted); margin-top: 2px; }
-    .ch-live { font-size: 8px; font-weight: 700; color: var(--red); background: var(--red-dim); padding: 2px 7px; border-radius: 100px; letter-spacing: .5px; }
-    .phone-bar { height: 3px; background: var(--surface3); border-radius: 100px; margin: 10px 0 8px; overflow: hidden; }
-    .phone-bar-fill { height: 100%; background: var(--grad); border-radius: 100px; width: 65%; animation: loadBar 2.5s 1s ease both; }
-    @keyframes loadBar { from { width: 0; } to { width: 65%; } }
-    .phone-glow { position: absolute; left: 50%; bottom: -60px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(123,47,255,0.2) 0%, transparent 70%); transform: translateX(-50%); pointer-events: none; }
-    .phone-float { animation: phoneFloat 5s ease-in-out infinite; }
-    @keyframes phoneFloat { 0%,100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-14px) rotate(0deg); } }
-    .phone-badge {
-      position: absolute; right: -28px; top: 80px;
-      background: var(--surface2); border: 1px solid var(--border);
-      border-radius: 14px; padding: 10px 14px; box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-      animation: fadeUp .8s .7s ease both;
-    }
-    .phone-badge-num { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .phone-badge-label { font-size: 10px; color: var(--muted); }
-    .phone-badge-2 {
-      position: absolute; left: -36px; bottom: 120px;
-      background: var(--surface2); border: 1px solid var(--border);
-      border-radius: 14px; padding: 10px 14px; box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-      animation: fadeUp .8s .9s ease both;
-    }
-    .rating { display: flex; align-items: center; gap: 5px; }
-    .stars { color: var(--gold); font-size: 12px; }
+  /* ---- PLAYER SCREEN ---- */
+  #playerScreen { background:#000; }
+  .player-topbar {
+    display:flex; align-items:center; gap:12px; padding:10px 14px;
+    background:linear-gradient(to bottom, rgba(0,0,0,.8), transparent);
+    position:absolute; top:0; left:0; right:0; z-index:10;
+  }
+  .btn-back { background:none; border:none; color:#fff; font-size:22px; cursor:pointer; padding:4px; }
+  .player-title { font-size:15px; font-weight:600; flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .btn-fav { background:none; border:none; color:var(--accent); font-size:20px; cursor:pointer; }
+  video { width:100%; height:100%; object-fit:contain; background:#000; }
+  .player-info {
+    position:absolute; bottom:0; left:0; right:0; padding:16px;
+    background:linear-gradient(to top, rgba(0,0,0,.9), transparent);
+    pointer-events:none;
+  }
+  .player-info h2 { font-family:'Bebas Neue'; font-size:28px; letter-spacing:2px; color:#fff; }
+  .player-info p { font-size:12px; color:rgba(255,255,255,.6); margin-top:4px; }
 
-    /* ── KEYFRAMES ─────────────────────────────────── */
-    @keyframes fadeUp   { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
-    @keyframes aniUp    { from { opacity:0; transform:translateY(32px); } to { opacity:1; transform:translateY(0); } }
-    @keyframes aniLeft  { from { opacity:0; transform:translateX(-28px); } to { opacity:1; transform:translateX(0); } }
-    @keyframes aniRight { from { opacity:0; transform:translateX(28px);  } to { opacity:1; transform:translateX(0); } }
-    @keyframes aniScale { from { opacity:0; transform:scale(0.93); }      to { opacity:1; transform:scale(1); } }
+  /* ---- DETAIL SCREEN ---- */
+  #detailScreen { overflow-y:auto; }
+  .detail-hero { position:relative; width:100%; aspect-ratio:2/3; max-height:360px; overflow:hidden; }
+  .detail-hero img { width:100%; height:100%; object-fit:cover; }
+  .detail-hero::after { content:''; position:absolute; inset:0; background:linear-gradient(to top, var(--bg) 0%, transparent 50%); }
+  .detail-back { position:absolute; top:14px; left:14px; z-index:2; background:rgba(0,0,0,.5); border:none; color:#fff; font-size:22px; cursor:pointer; padding:6px 10px; border-radius:8px; backdrop-filter:blur(8px); }
+  .detail-body { padding:0 18px 80px; margin-top:-40px; position:relative; }
+  .detail-title { font-family:'Bebas Neue'; font-size:36px; letter-spacing:2px; line-height:1; }
+  .detail-meta { display:flex; gap:10px; align-items:center; margin:8px 0 14px; flex-wrap:wrap; }
+  .badge { background:var(--surface2); border:1px solid var(--border); border-radius:4px; padding:3px 8px; font-size:11px; color:var(--muted); }
+  .badge.gold { background:rgba(232,185,79,.15); border-color:var(--accent); color:var(--accent); }
+  .detail-plot { font-size:14px; color:rgba(240,240,245,.75); line-height:1.6; margin-bottom:20px; }
+  .btn-play {
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    width:100%; background:var(--accent); color:#0a0a0f; border:none; border-radius:var(--radius);
+    padding:15px; font-size:16px; font-weight:700; font-family:inherit; cursor:pointer;
+    transition: background .2s; letter-spacing:.5px;
+  }
+  .btn-play:active { background:var(--accent2); }
+  .btn-fav-detail {
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    width:100%; background:var(--surface2); color:var(--text); border:1px solid var(--border); border-radius:var(--radius);
+    padding:13px; font-size:14px; font-weight:500; font-family:inherit; cursor:pointer;
+    margin-top:10px; transition: all .2s;
+  }
+  .btn-fav-detail.active { border-color:var(--accent); color:var(--accent); }
 
-    /* ── SCROLL ANIMATION SYSTEM ───────────────────── */
-    /* État initial : invisible */
-    [data-ani] {
-      opacity: 0;
-    }
-    /* Quand l'élément est entré dans le viewport : on lance l'anim */
-    [data-ani].ani-go {
-      animation-fill-mode: both;
-      animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-      animation-duration: 0.7s;
-    }
-    [data-ani="up"].ani-go    { animation-name: aniUp; }
-    [data-ani="left"].ani-go  { animation-name: aniLeft; }
-    [data-ani="right"].ani-go { animation-name: aniRight; }
-    [data-ani="scale"].ani-go { animation-name: aniScale; }
+  /* BOTTOM NAV */
+  .bottom-nav {
+    position:fixed; bottom:0; left:0; right:0; height:60px;
+    background:var(--surface); border-top:1px solid var(--border);
+    display:flex; align-items:center; z-index:20;
+  }
+  .nav-item { flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; cursor:pointer; padding:8px 0; }
+  .nav-item span:first-child { font-size:20px; }
+  .nav-item span:last-child { font-size:10px; color:var(--muted); }
+  .nav-item.active span:last-child { color:var(--accent); }
+  .nav-item.active span:first-child { filter: drop-shadow(0 0 4px var(--accent)); }
 
-    /* Délais via data-delay (en ms, géré en JS inline style) */
+  /* EMPTY STATE */
+  .empty-state { text-align:center; padding:60px 20px; color:var(--muted); }
+  .empty-state .ico { font-size:48px; margin-bottom:12px; }
+  .empty-state p { font-size:14px; }
 
-    /* plan-card featured garde son scale de base APRÈS l'anim */
-    .plan-card.featured[data-ani].ani-go {
-      animation-name: aniScale;
-    }
-
-    /* ── SECTION LABELS ────────────────────────────── */
-    .section-label { font-size: 11px; font-weight: 600; letter-spacing: 2px; color: var(--violet); text-transform: uppercase; margin-bottom: 14px; }
-    h2 { font-family: 'Syne', sans-serif; font-size: clamp(30px, 4vw, 48px); font-weight: 800; letter-spacing: -1.5px; line-height: 1.1; }
-    .section-sub { font-size: 15px; color: var(--muted); line-height: 1.7; max-width: 500px; margin-top: 14px; }
-
-    /* ── DISCLAIMER BANNER ─────────────────────────── */
-    .disclaimer-banner {
-      background: rgba(255,214,10,0.06); border: 1px solid rgba(255,214,10,0.2);
-      border-radius: 14px; padding: 16px 22px;
-      display: flex; align-items: flex-start; gap: 12px;
-      font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 20px;
-    }
-    .disclaimer-banner .disc-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
-    .disclaimer-banner strong { color: rgba(255,214,10,0.9); display: block; margin-bottom: 3px; font-size: 13px; }
-
-    /* ── FEATURES ──────────────────────────────────── */
-    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 60px; }
-    .feat-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--r); padding: 28px;
-      transition: border-color .25s, transform .25s, box-shadow .25s;
-      position: relative; overflow: hidden;
-    }
-    .feat-card::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(123,47,255,0.5), rgba(255,45,85,0.4), transparent);
-      opacity: 0; transition: opacity .3s;
-    }
-    .feat-card:hover { border-color: rgba(123,47,255,0.25); transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
-    .feat-card:hover::before { opacity: 1; }
-    .feat-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 18px; }
-    .feat-card h3 { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; margin-bottom: 8px; }
-    .feat-card p { font-size: 13px; color: var(--muted); line-height: 1.65; }
-
-    /* ── PRICING ───────────────────────────────────── */
-    #pricing { text-align: center; }
-    .pricing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 60px; text-align: left; align-items: center; max-width: 760px; margin-left: auto; margin-right: auto; }
-    .plan-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 24px; padding: 36px 32px;
-      position: relative; overflow: hidden;
-      transition: transform .25s, box-shadow .25s;
-    }
-    .plan-card:hover { transform: translateY(-6px); box-shadow: 0 30px 80px rgba(0,0,0,0.5); }
-    .plan-card.featured {
-      background: linear-gradient(160deg, #100820 0%, #0d0010 100%);
-      border-color: rgba(123,47,255,0.4);
-      transform: scale(1.03);
-      box-shadow: 0 0 0 1px rgba(123,47,255,0.15), 0 40px 80px rgba(123,47,255,0.12);
-    }
-    .plan-card.featured:hover { transform: scale(1.03) translateY(-6px); }
-    .plan-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: var(--grad); color: white;
-      font-size: 10px; font-weight: 700; letter-spacing: .5px;
-      padding: 4px 12px; border-radius: 100px; margin-bottom: 20px;
-    }
-    .plan-name { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; margin-bottom: 6px; }
-    .plan-desc { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
-    .plan-price { display: flex; align-items: baseline; gap: 4px; margin-bottom: 28px; }
-    .plan-price .amount { font-family: 'Syne', sans-serif; font-size: 48px; font-weight: 800; color: white; }
-    .plan-price .currency { font-size: 22px; color: var(--muted); margin-right: 2px; }
-    .plan-price .period { font-size: 14px; color: var(--muted); }
-    .plan-features { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
-    .plan-features li { font-size: 13px; display: flex; align-items: center; gap: 10px; }
-    .plan-features li .check { color: var(--green); font-size: 15px; }
-    .plan-features li .cross { color: var(--faint); font-size: 15px; }
-    .plan-features li.muted { color: var(--muted); }
-    .plan-btn {
-      width: 100%; padding: 14px; border-radius: 100px; border: none; cursor: pointer;
-      font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; transition: all .2s;
-    }
-    .plan-btn.solid { background: var(--grad); color: white; }
-    .plan-btn.solid:hover { box-shadow: 0 0 30px rgba(123,47,255,0.4); transform: translateY(-1px); }
-    .plan-btn.outline { background: transparent; color: var(--muted); border: 1px solid var(--faint); }
-    .plan-btn.outline:hover { border-color: rgba(255,255,255,0.25); color: white; }
-
-    .pricing-disclaimer {
-      max-width: 760px; margin: 28px auto 0;
-      background: rgba(123,47,255,0.05); border: 1px solid rgba(123,47,255,0.15);
-      border-radius: 12px; padding: 16px 20px;
-      font-size: 12px; color: var(--muted); line-height: 1.7; text-align: left;
-    }
-
-    /* ── DOWNLOAD ──────────────────────────────────── */
-    .dl-wrapper { background: var(--surface); border: 1px solid var(--border); border-radius: 32px; padding: 72px 48px; position: relative; overflow: hidden; }
-    .dl-glow { position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(123,47,255,0.08) 0%, transparent 70%); top: 50%; left: 50%; transform: translate(-50%,-50%); pointer-events: none; }
-    .dl-buttons { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 40px; flex-wrap: wrap; }
-    .dl-btn { display: flex; align-items: center; gap: 12px; padding: 14px 28px; border-radius: 14px; text-decoration: none; font-size: 14px; font-weight: 500; transition: all .2s; }
-    .dl-btn.dark { background: white; color: black; }
-    .dl-btn.dark:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(255,255,255,0.15); }
-    .dl-btn.dark-outline { background: var(--surface2); color: white; border: 1px solid var(--border); }
-    .dl-btn.dark-outline:hover { border-color: rgba(255,255,255,0.25); transform: translateY(-2px); }
-    .dl-icon { font-size: 22px; }
-    .dl-text strong { display: block; font-size: 16px; font-weight: 700; }
-    .dl-text span { font-size: 11px; opacity: .6; }
-    .dl-note { font-size: 12px; color: var(--muted); margin-top: 20px; }
-
-    /* ── FAQ ───────────────────────────────────────── */
-    .faq-list { margin-top: 56px; display: flex; flex-direction: column; gap: 12px; }
-    .faq-item { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; transition: border-color .2s; }
-    .faq-item.open { border-color: rgba(123,47,255,0.3); }
-    .faq-q { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; cursor: pointer; font-size: 15px; font-weight: 500; user-select: none; }
-    .faq-q:hover { color: white; }
-    .faq-arrow { width: 28px; height: 28px; border-radius: 50%; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; margin-left: 16px; transition: transform .3s, background .2s; }
-    .faq-item.open .faq-arrow { transform: rotate(45deg); background: var(--vio-dim); color: var(--violet); }
-    .faq-a { font-size: 14px; color: var(--muted); line-height: 1.75; max-height: 0; overflow: hidden; padding: 0 24px; transition: max-height .35s ease, padding .35s ease; }
-    .faq-item.open .faq-a { max-height: 300px; padding: 0 24px 20px; }
-
-    /* ── CONTACT ───────────────────────────────────── */
-    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; margin-top: 56px; align-items: start; }
-    .contact-info { display: flex; flex-direction: column; gap: 20px; }
-    .contact-chip { display: flex; align-items: center; gap: 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; text-decoration: none; color: white; transition: border-color .2s, transform .2s; }
-    .contact-chip:hover { border-color: rgba(123,47,255,0.3); transform: translateX(4px); }
-    .contact-chip-icon { width: 42px; height: 42px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
-    .contact-chip-text strong { display: block; font-size: 14px; margin-bottom: 2px; }
-    .contact-chip-text span { font-size: 12px; color: var(--muted); }
-    .contact-form { display: flex; flex-direction: column; gap: 14px; }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .form-input { width: 100%; padding: 14px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; color: white; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; transition: border-color .2s; resize: none; }
-    .form-input::placeholder { color: var(--muted); }
-    .form-input:focus { border-color: rgba(123,47,255,0.5); }
-    .form-submit { padding: 14px; background: var(--grad); color: white; border: none; border-radius: 12px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; transition: box-shadow .2s, transform .2s; }
-    .form-submit:hover { box-shadow: 0 0 30px rgba(123,47,255,0.4); transform: translateY(-1px); }
-
-    /* ── FOOTER ────────────────────────────────────── */
-    footer { border-top: 1px solid var(--border); padding: 48px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 24px; }
-    .footer-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px; display: flex; align-items: center; gap: 10px; }
-    .footer-links { display: flex; gap: 28px; flex-wrap: wrap; align-items: center; }
-    .footer-links a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color .2s; }
-    .footer-links a:hover { color: white; }
-    .footer-login-link {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-size: 13px; font-weight: 600;
-      background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text; text-decoration: none; padding: 0; transition: opacity .2s;
-    }
-    .footer-login-link:hover { opacity: 0.8; }
-    .footer-copy { font-size: 12px; color: var(--muted); }
-
-    /* ── TOAST ─────────────────────────────────────── */
-    #toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 12px 24px; font-size: 14px; opacity: 0; transition: opacity .3s, transform .3s; z-index: 9999; pointer-events: none; white-space: nowrap; }
-    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-    /* ── RESPONSIVE ────────────────────────────────── */
-    @media (max-width: 900px) {
-      nav { padding: 0 20px; }
-      .nav-links { display: none; }
-      .nav-right { gap: 8px; }
-      section { padding: 80px 24px; }
-      .hero-inner { grid-template-columns: 1fr; padding: 0 24px; }
-      .hero-phone { display: none; }
-      .features-grid { grid-template-columns: 1fr 1fr; }
-      .pricing-grid { grid-template-columns: 1fr; }
-      .plan-card.featured { transform: none; }
-      .plan-card.featured:hover { transform: translateY(-6px); }
-      .contact-grid { grid-template-columns: 1fr; }
-      footer { flex-direction: column; align-items: flex-start; gap: 20px; padding: 32px 24px; }
-      body { cursor: auto; }
-      #cursor, #cursor-ring { display: none; }
-    }
-    @media (max-width: 600px) {
-      .features-grid { grid-template-columns: 1fr; }
-      .form-row { grid-template-columns: 1fr; }
-      .hero-stats { gap: 20px; }
-      .pricing-grid { grid-template-columns: 1fr; }
-      .nav-login span { display: none; }
-      .nav-login { padding: 8px 11px; }
-      footer { padding: 28px 16px; }
-      .footer-links { gap: 16px; }
-    }
-  </style>
+  /* SETTINGS PANEL */
+  #settingsPanel {
+    position:fixed; inset:0; z-index:50; background:rgba(0,0,0,.7);
+    display:flex; align-items:flex-end; transition: opacity .3s;
+  }
+  #settingsPanel.hidden { opacity:0; pointer-events:none; }
+  .settings-sheet {
+    background:var(--surface); border-radius:20px 20px 0 0; padding:24px 20px 40px; width:100%;
+    transform:translateY(0); transition: transform .3s;
+  }
+  #settingsPanel.hidden .settings-sheet { transform:translateY(100%); }
+  .settings-sheet h3 { font-family:'Bebas Neue'; font-size:28px; letter-spacing:2px; margin-bottom:20px; color:var(--accent); }
+  .settings-row { display:flex; justify-content:space-between; align-items:center; padding:14px 0; border-bottom:1px solid var(--border); font-size:14px; }
+  .settings-row:last-child { border:none; }
+  .settings-val { color:var(--muted); font-size:13px; }
+  .btn-logout { width:100%; margin-top:16px; background:rgba(224,85,85,.15); border:1px solid var(--danger); color:var(--danger); border-radius:var(--radius); padding:13px; font-family:inherit; font-size:14px; cursor:pointer; }
+</style>
 </head>
 <body>
 
-<div id="cursor"></div>
-<div id="cursor-ring"></div>
-<div id="toast">✓ Message envoyé !</div>
-
-<!-- ── NAV ──────────────────────────────────────── -->
-<nav>
-  <a href="#" class="nav-logo">
-    <img href="logo.png" width="30px" height="auto">
-    ARICH IPTV
-  </a>
-  <div class="nav-links">
-    <a href="#features">Fonctionnalités</a>
-    <a href="#pricing">Tarifs</a>
-    <a href="#faq">FAQ</a>
-    <a href="#contact">Contact</a>
+<!-- ===== LOGIN ===== -->
+<div class="screen" id="loginScreen">
+  <div class="logo">
+    <h1>StreamVault</h1>
+    <p>Votre médiathèque privée</p>
   </div>
-  <div class="nav-right">
-    <a href="https://devhertox.github.io/arich_iptv/auth.html" class="nav-login" data-umami-event="nav-login">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-        <circle cx="12" cy="7" r="4"/>
-      </svg>
-      <span>Mon compte</span>
-    </a>
-    <a href="#download" class="nav-cta" data-umami-event="cta-download-nav">Télécharger</a>
-  </div>
-</nav>
-
-<!-- ── HERO ─────────────────────────────────────── -->
-<div id="hero">
-  <div class="hero-bg">
-    <div class="hero-glow"></div>
-    <div class="hero-glow-2"></div>
-    <div class="hero-grid"></div>
-  </div>
-  <div class="hero-inner">
-    <div>
-      <div class="hero-tag">
-        <div class="hero-tag-dot"></div>
-        Player IPTV · Android
-      </div>
-      <h1>
-        Le player<br>
-        <span class="accent">IPTV</span> qui<br>
-        <span class="stroke">déchire.</span>
-      </h1>
-      <p class="hero-sub">
-        Connectez votre propre accès IPTV (Xtream Codes ou M3U) et profitez d'une expérience de lecture premium. Design soigné, zapping rapide, multi-playlists.
-      </p>
-      <div class="hero-actions">
-        <a href="#download" class="btn-primary" data-umami-event="cta-download-hero">⬇ Télécharger l'app</a>
-        <a href="#pricing" class="btn-secondary" data-umami-event="cta-pricing-hero">Voir les offres →</a>
-      </div>
-      <div class="hero-login-strip">
-        <span>Déjà client ?</span>
-        <a href="https://devhertox.github.io/arich_iptv/auth.html" data-umami-event="hero-login-strip">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-          Se connecter / Gérer mes playlists
-        </a>
-      </div>
-      <div class="hero-stats">
-        <div><span>Xtream</span><span>& M3U natif</span></div>
-        <div><span>4K / HD</span><span>Qualité max</span></div>
-        <div><span>Android</span><span>6.0+</span></div>
-      </div>
+  <div class="login-card">
+    <div class="field">
+      <label>URL Serveur</label>
+      <input type="url" id="loginUrl" placeholder="http://serveur.com:8080" autocomplete="off" autocapitalize="none">
     </div>
-    <div class="hero-phone">
-      <div class="phone-wrap phone-float">
-        <div class="phone-frame">
-          <div class="phone-notch"></div>
-          <div class="phone-screen">
-            <div style="font-size:9px;color:var(--muted);margin-bottom:8px;font-weight:600;letter-spacing:1px;">EN DIRECT</div>
-            <div class="phone-channel">
-              <div class="ch-thumb" style="background:linear-gradient(135deg,#1a1a2e,#16213e);">📺</div>
-              <div class="ch-info"><div class="ch-name">Votre chaîne</div><div class="ch-cat">Votre accès IPTV</div></div>
-              <div class="ch-live">LIVE</div>
-            </div>
-            <div class="phone-bar"><div class="phone-bar-fill"></div></div>
-            <div style="font-size:9px;color:var(--muted);margin-bottom:8px;font-weight:600;letter-spacing:1px;">PLAYLISTS</div>
-            <div class="phone-channel">
-              <div class="ch-thumb" style="background:linear-gradient(135deg,#0f2027,#203a43);">🎬</div>
-              <div class="ch-info"><div class="ch-name">Ma playlist M3U</div><div class="ch-cat">Films & Séries</div></div>
-            </div>
-            <div class="phone-channel">
-              <div class="ch-thumb" style="background:linear-gradient(135deg,#1a0000,#3d0000);">⚡</div>
-              <div class="ch-info"><div class="ch-name">Accès Xtream</div><div class="ch-cat">Compte principal</div></div>
-            </div>
-            <div class="phone-channel">
-              <div class="ch-thumb" style="background:linear-gradient(135deg,#0a0a0a,#1a1a1a);">➕</div>
-              <div class="ch-info"><div class="ch-name">Ajouter...</div><div class="ch-cat">Nouvelle playlist</div></div>
-            </div>
-          </div>
-        </div>
-        <div class="phone-glow"></div>
-        <div class="phone-badge">
-          <div class="phone-badge-num">Multi</div>
-          <div class="phone-badge-label">Playlists</div>
-        </div>
-        <div class="phone-badge-2">
-          <div class="rating"><span class="stars">★★★★★</span></div>
-          <div style="font-size:10px;color:var(--muted);margin-top:3px;">Top player</div>
-        </div>
-      </div>
+    <div class="field">
+      <label>Identifiant</label>
+      <input type="text" id="loginUser" placeholder="username" autocomplete="off" autocapitalize="none">
     </div>
+    <div class="field">
+      <label>Mot de passe</label>
+      <input type="password" id="loginPass" placeholder="••••••••">
+    </div>
+    <button class="btn-primary" id="loginBtn">Se connecter</button>
+    <div class="error-msg" id="loginError"></div>
   </div>
 </div>
 
-<!-- ── DISCLAIMER LÉGAL ──────────────────────────── -->
-<div style="max-width:900px;margin:0 auto;padding:0 48px;">
-  <div class="disclaimer-banner">
-    <span class="disc-icon">ℹ️</span>
-    <div>
-      <strong>Arich IPTV est un lecteur multimédia — nous ne fournissons aucun contenu.</strong>
-      Cette application est un outil technique permettant de lire des flux vidéo depuis vos propres accès IPTV (Xtream Codes, playlists M3U). Vous devez disposer de votre propre abonnement IPTV auprès du fournisseur de votre choix. Arich IPTV n'est pas responsable du contenu diffusé via l'application.
+<!-- ===== APP ===== -->
+<div class="screen hidden" id="appScreen">
+  <div class="topbar">
+    <span class="logo-small">SV</span>
+    <div class="search-wrap">
+      <span class="ico-search">🔍</span>
+      <input type="text" id="searchInput" placeholder="Rechercher un film, série…">
     </div>
+    <button class="btn-icon" id="settingsBtn">⚙️</button>
+  </div>
+  <div class="cat-tabs" id="catTabs"></div>
+  <div class="content-area" id="contentArea"></div>
+  <nav class="bottom-nav">
+    <div class="nav-item active" data-tab="vod">
+      <span>🎬</span><span>Films</span>
+    </div>
+    <div class="nav-item" data-tab="series">
+      <span>📺</span><span>Séries</span>
+    </div>
+    <div class="nav-item" data-tab="encours">
+      <span>▶️</span><span>En cours</span>
+    </div>
+    <div class="nav-item" data-tab="favs">
+      <span>⭐</span><span>Favoris</span>
+    </div>
+  </nav>
+</div>
+
+<!-- ===== DETAIL ===== -->
+<div class="screen hidden" id="detailScreen">
+  <div class="detail-hero">
+    <button class="detail-back" id="detailBack">‹</button>
+    <img id="detailPoster" src="" alt="">
+  </div>
+  <div class="detail-body">
+    <div class="detail-title" id="detailTitle"></div>
+    <div class="detail-meta" id="detailMeta"></div>
+    <div class="detail-plot" id="detailPlot"></div>
+    <button class="btn-play" id="detailPlay">▶ Regarder</button>
+    <button class="btn-fav-detail" id="detailFavBtn">☆ Ajouter aux favoris</button>
   </div>
 </div>
 
-<!-- ── FEATURES ──────────────────────────────────── -->
-<section id="features">
-  <div class="section-label" data-ani="up" data-delay="0">Pourquoi Arich IPTV</div>
-  <h2 data-ani="up" data-delay="80">Conçu pour <span style="background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">l'expérience</span><br>ultime.</h2>
-  <p class="section-sub" data-ani="up" data-delay="160">Chaque détail est pensé pour que vous ne pensiez qu'à regarder.</p>
-
-  <div class="features-grid">
-    <div class="feat-card" data-ani="up" data-delay="0">
-      <div class="feat-icon" style="background:rgba(123,47,255,0.1);">🔌</div>
-      <h3>Compatible Xtream & M3U</h3>
-      <p>Connectez n'importe quel accès IPTV : URL Xtream Codes (login/mdp) ou lien M3U direct. Détection automatique du format.</p>
-    </div>
-    <div class="feat-card" data-ani="up" data-delay="80">
-      <div class="feat-icon" style="background:rgba(10,132,255,0.1);">📋</div>
-      <h3>Multi-playlists</h3>
-      <p>Gérez plusieurs comptes IPTV en parallèle. Basculez d'un accès à l'autre en un tap, sans vous déconnecter.</p>
-    </div>
-    <div class="feat-card" data-ani="up" data-delay="160">
-      <div class="feat-icon" style="background:rgba(48,209,88,0.1);">⚡</div>
-      <h3>Zapping instantané</h3>
-      <p>Player optimisé avec buffer réduit à 32 Mo. La vidéo démarre en quelques secondes, même en 4K.</p>
-    </div>
-    <div class="feat-card" data-ani="up" data-delay="0">
-      <div class="feat-icon" style="background:rgba(255,214,10,0.1);">⭐</div>
-      <h3>Favoris & Historique</h3>
-      <p>Retrouvez vos chaînes préférées et reprenez exactement où vous en étiez, avec mémorisation de la position.</p>
-    </div>
-    <div class="feat-card" data-ani="up" data-delay="80">
-      <div class="feat-icon" style="background:rgba(255,45,85,0.1);">📱</div>
-      <h3>Android TV & Mobile</h3>
-      <p>Interface adaptée au tactile et à la télécommande. Compatible Android TV, Google TV, Fire Stick avec sideload.</p>
-    </div>
-    <div class="feat-card" data-ani="up" data-delay="160">
-      <div class="feat-icon" style="background:rgba(10,132,255,0.1);">🔑</div>
-      <h3>Licence par appareil</h3>
-      <p>Une licence = un appareil identifié par sa Device Key unique. Transfert possible sur demande.</p>
-    </div>
+<!-- ===== PLAYER ===== -->
+<div class="screen hidden" id="playerScreen">
+  <div class="player-topbar">
+    <button class="btn-back" id="playerBack">‹</button>
+    <span class="player-title" id="playerTitle"></span>
+    <button class="btn-fav" id="playerFavBtn">☆</button>
   </div>
-</section>
-
-<!-- ── PRICING ───────────────────────────────────── -->
-<section id="pricing" style="max-width:1200px;margin:0 auto;padding:120px 48px;">
-  <div class="section-label" data-ani="up" data-delay="0" style="text-align:center;">Tarifs</div>
-  <h2 data-ani="up" data-delay="80" style="text-align:center;">Simple. Honnête.<br><span style="background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Sans surprise.</span></h2>
-  <p class="section-sub" data-ani="up" data-delay="160" style="text-align:center;margin:0 auto;">Accès au player uniquement — apportez votre propre source IPTV.</p>
-
-  <div class="pricing-grid">
-    <div class="plan-card" data-ani="left" data-delay="0">
-      <div class="plan-name">Annuel</div>
-      <div class="plan-desc">Idéal pour tester le player</div>
-      <div class="plan-price">
-        <span class="currency">€</span><span class="amount">2,99</span><span class="period">/ an</span>
-      </div>
-      <ul class="plan-features">
-        <li><span class="check">✓</span> Player Xtream Codes & M3U</li>
-        <li><span class="check">✓</span> Multi-playlists illimitées</li>
-        <li><span class="check">✓</span> Favoris & Historique</li>
-        <li><span class="check">✓</span> 1 appareil (Device Key)</li>
-        <li class="muted"><span class="cross">–</span> <span>Mises à jour prioritaires</span></li>
-      </ul>
-      <button class="plan-btn outline" onclick="startCheckout('yearly')" data-plan="yearly">Activer pour 2,99€/an</button>
-    </div>
-
-    <div class="plan-card featured" data-ani="scale" data-delay="120">
-      <div class="plan-badge">🔥 Meilleur choix</div>
-      <div class="plan-name">À vie</div>
-      <div class="plan-desc">Payez une fois, profitez toujours</div>
-      <div class="plan-price">
-        <span class="currency">€</span><span class="amount">4,99</span><span class="period">une seule fois</span>
-      </div>
-      <ul class="plan-features">
-        <li><span class="check">✓</span> Player Xtream Codes & M3U</li>
-        <li><span class="check">✓</span> Multi-playlists illimitées</li>
-        <li><span class="check">✓</span> Favoris & Historique</li>
-        <li><span class="check">✓</span> 1 appareil (Device Key)</li>
-        <li><span class="check">✓</span> Mises à jour à vie</li>
-      </ul>
-      <button class="plan-btn solid" data-plan="lifetime" onclick="startCheckout('lifetime')">Acheter la licence à vie</button>
-    </div>
+  <video id="videoEl" controls playsinline autoplay></video>
+  <div class="player-info">
+    <h2 id="playerInfoTitle"></h2>
+    <p id="playerInfoMeta"></p>
   </div>
+</div>
 
-  <div class="pricing-disclaimer" data-ani="up" data-delay="0">
-    <strong style="color:rgba(255,255,255,0.7);display:block;margin-bottom:6px;">⚠️ Important — À lire avant d'acheter</strong>
-    Arich IPTV est un <strong style="color:rgba(255,255,255,0.6)">lecteur multimédia</strong> uniquement. L'abonnement donne accès à l'application player.
-    <strong style="color:rgba(255,255,255,0.6)">Aucun contenu, aucune chaîne, aucun film ne sont inclus.</strong>
-    Vous devez posséder votre propre accès IPTV (Xtream Codes ou M3U) auprès d'un fournisseur tiers.
-    La licence est liée à votre appareil via sa Device Key (visible dans Paramètres → Appareil).
-    Paiement via PayPal ou carte bancaire. Activation sous 2h après réception de votre Device Key.
+<!-- ===== SETTINGS ===== -->
+<div id="settingsPanel" class="hidden">
+  <div class="settings-sheet">
+    <h3>Paramètres</h3>
+    <div class="settings-row">
+      <span>Serveur</span>
+      <span class="settings-val" id="setServer">—</span>
+    </div>
+    <div class="settings-row">
+      <span>Utilisateur</span>
+      <span class="settings-val" id="setUser">—</span>
+    </div>
+    <div class="settings-row">
+      <span>Expiration</span>
+      <span class="settings-val" id="setExpiry">—</span>
+    </div>
+    <div class="settings-row">
+      <span>Favoris sauvegardés</span>
+      <span class="settings-val" id="setFavCount">0</span>
+    </div>
+    <button class="btn-logout" id="logoutBtn">Se déconnecter</button>
+    <button class="load-more-btn" style="margin-top:10px;" id="closeSettings">Fermer</button>
   </div>
-  <p style="text-align:center;font-size:12px;color:var(--muted);margin-top:16px;">
-    Satisfait ou remboursé sous 7 jours · Sans engagement pour le mensuel
-  </p>
-</section>
-
-<!-- ── DOWNLOAD ───────────────────────────────────── -->
-<section id="download" style="max-width:1200px;margin:0 auto;padding:0 48px 120px;">
-  <div class="dl-wrapper" data-ani="scale" data-delay="0">
-    <div class="dl-glow"></div>
-    <div style="position:relative;z-index:1;">
-      <div class="section-label" style="text-align:center;">Téléchargement</div>
-      <h2 style="text-align:center;margin-top:10px;">Installez le player<br><span style="background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">en 30 secondes.</span></h2>
-      <p style="text-align:center;color:var(--muted);font-size:15px;margin-top:14px;">Disponible sur Android. iOS bientôt.</p>
-      <div class="dl-buttons">
-        <a href="https://github.com/devhertox/arich_iptv/releases/latest/download/app-release.apk" class="dl-btn dark" data-umami-event="download-apk">
-          <div class="dl-icon">⬇</div>
-          <div class="dl-text"><strong>Télécharger l'APK</strong><span>Android · v1.2.0 · 100 Mo</span></div>
-        </a>
-        <a href="https://play.google.com/store" target="_blank" class="dl-btn dark-outline" data-umami-event="download-playstore">
-          <div class="dl-icon" style="font-size:26px;">▶</div>
-          <div class="dl-text"><strong>Google Play</strong><span>Bientôt disponible</span></div>
-        </a>
-      </div>
-      <p class="dl-note">Android 6.0+ requis · Activer "Sources inconnues" pour l'APK · Gratuit à télécharger, licence requise</p>
-    </div>
-  </div>
-</section>
-
-<!-- ── FAQ ────────────────────────────────────────── -->
-<section id="faq" style="max-width:800px;">
-  <div class="section-label" data-ani="up" data-delay="0">FAQ</div>
-  <h2 data-ani="up" data-delay="80">Questions <span style="background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">fréquentes.</span></h2>
-
-  <div class="faq-list">
-    <div class="faq-item" data-ani="up" data-delay="0">
-      <div class="faq-q" onclick="toggleFaq(this)">Qu'est-ce qu'Arich IPTV exactement ?<div class="faq-arrow">+</div></div>
-      <div class="faq-a">Arich IPTV est un <strong>lecteur multimédia</strong> pour Android, similaire à VLC ou TiviMate. Il ne fournit aucun contenu. Vous connectez votre propre accès IPTV (un lien M3U ou des identifiants Xtream Codes obtenus auprès d'un fournisseur tiers), et l'application vous permet de lire ces flux avec une interface premium.</div>
-    </div>
-    <div class="faq-item" data-ani="up" data-delay="60">
-      <div class="faq-q" onclick="toggleFaq(this)">Comment activer ma licence ?<div class="faq-arrow">+</div></div>
-      <div class="faq-a">Après téléchargement, ouvrez l'app → Paramètres → Appareil. Vous y trouverez votre <strong>Device Key</strong> unique (format ARICH-XXXX-XXXX-XXXX). Envoyez-la nous via le formulaire de contact ou WhatsApp avec votre preuve de paiement. L'activation est effectuée sous 2h.</div>
-    </div>
-    <div class="faq-item" data-ani="up" data-delay="120">
-      <div class="faq-q" onclick="toggleFaq(this)">Est-ce que vous fournissez les chaînes ou l'accès IPTV ?<div class="faq-arrow">+</div></div>
-      <div class="faq-a">Non, absolument pas. Nous ne fournissons aucun contenu, aucune chaîne, aucun film. Arich IPTV est uniquement un lecteur. Vous devez disposer de votre propre abonnement IPTV auprès du fournisseur de votre choix pour utiliser l'application.</div>
-    </div>
-    <div class="faq-item" data-ani="up" data-delay="0">
-      <div class="faq-q" onclick="toggleFaq(this)">Comment ajouter mon accès IPTV dans l'app ?<div class="faq-arrow">+</div></div>
-      <div class="faq-a">Au premier lancement, l'app vous propose 3 modes : Xtream Codes (URL serveur + login + mot de passe), URL M3U directe, ou flux direct. Vous pouvez ensuite ajouter plusieurs playlists depuis Paramètres → Playlists → Ajouter une playlist.</div>
-    </div>
-    <div class="faq-item" data-ani="up" data-delay="60">
-      <div class="faq-q" onclick="toggleFaq(this)">La licence est-elle liée à mon appareil ?<div class="faq-arrow">+</div></div>
-      <div class="faq-a">Oui. Chaque licence est liée à une Device Key unique générée par votre appareil Android. En cas de changement d'appareil (achat, factory reset), contactez le support pour transfert gratuit de la licence.</div>
-    </div>
-    <div class="faq-item" data-ani="up" data-delay="120">
-      <div class="faq-q" onclick="toggleFaq(this)">Est-ce compatible avec ma Smart TV ?<div class="faq-arrow">+</div></div>
-      <div class="faq-a">L'application est disponible en APK Android. Si votre TV tourne sous Android TV ou Google TV, vous pouvez l'installer via sideload. Pour les autres TV, utilisez un boîtier Android (Fire Stick, MiBox, Chromecast avec Google TV, etc.).</div>
-    </div>
-    <div class="faq-item" data-ani="up" data-delay="180">
-      <div class="faq-q" onclick="toggleFaq(this)">Puis-je essayer avant d'acheter ?<div class="faq-arrow">+</div></div>
-      <div class="faq-a">Oui. L'application est gratuite à télécharger et peut être utilisée en mode limité sans licence. Pour une expérience complète, une période d'essai de 48h peut être accordée sur demande via le formulaire contact en indiquant votre Device Key.</div>
-    </div>
-  </div>
-</section>
-
-<!-- ── CONTACT ────────────────────────────────────── -->
-<section id="contact" style="max-width:1100px;">
-  <div class="section-label" data-ani="up" data-delay="0">Contact</div>
-  <h2 data-ani="up" data-delay="80">On est là <span style="background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">pour vous.</span></h2>
-
-  <div class="contact-grid">
-    <div class="contact-info" data-ani="left" data-delay="0">
-      <p style="font-size:15px;color:var(--muted);line-height:1.7;margin-bottom:8px;">
-        Support réactif, généralement sous 2h. Pensez à inclure votre Device Key pour toute demande d'activation ou de transfert de licence.
-      </p>
-      <a href="https://wa.me/212682375935" target="_blank" class="contact-chip" data-umami-event="contact-whatsapp">
-        <div class="contact-chip-icon" style="background:rgba(37,211,102,0.1);">💬</div>
-        <div class="contact-chip-text"><strong>WhatsApp</strong><span>Réponse rapide · +212 06 82 37 59 35</span></div>
-      </a>
-      <a href="mailto:contact@arich.fr" class="contact-chip" data-umami-event="contact-email">
-        <div class="contact-chip-icon" style="background:rgba(10,132,255,0.1);">✉️</div>
-        <div class="contact-chip-text"><strong>Email</strong><span>contact@arich.fr</span></div>
-      </a>
-      <a href="https://t.me/arichiptv" target="_blank" class="contact-chip" data-umami-event="contact-telegram">
-        <div class="contact-chip-icon" style="background:rgba(10,132,255,0.08);">🛫</div>
-        <div class="contact-chip-text"><strong>Telegram</strong><span>@arichiptv</span></div>
-      </a>
-    </div>
-
-    <form class="contact-form" data-ani="right" data-delay="100" onsubmit="sendForm(event)">
-      <div class="form-row">
-        <input class="form-input" id="fname" placeholder="Votre prénom" />
-        <input class="form-input" id="femail" type="email" placeholder="Email" />
-      </div>
-      <input class="form-input" id="fsubject" placeholder="Sujet (ex: Activation licence à vie)" />
-      <input class="form-input" id="fdevicekey" placeholder="Votre Device Key (ex: ARICH-XXXX-XXXX-XXXX)" />
-      <textarea class="form-input" id="fmessage" rows="4" placeholder="Votre message..."></textarea>
-      <button type="submit" class="form-submit" data-umami-event="contact-form-submit">Envoyer le message →</button>
-    </form>
-  </div>
-</section>
-
-<!-- ── FOOTER ─────────────────────────────────────── -->
-<footer>
-  <div class="footer-logo">
-    <div class="nav-logo-icon" style="width:28px;height:28px;font-size:13px;">▶</div>
-    ARICH IPTV
-  </div>
-  <div class="footer-links">
-    <a href="#features">Fonctionnalités</a>
-    <a href="#pricing">Tarifs</a>
-    <a href="#faq">FAQ</a>
-    <a href="#contact">Contact</a>
-    <a href="manage-playlist.html">Playlists</a>
-    <a href="privacy-policy.html">Confidentialité</a>
-    <a href="#">CGU</a>
-    <a href="https://devhertox.github.io/arich_iptv/auth.html" class="footer-login-link" data-umami-event="footer-login">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="-webkit-text-fill-color:initial;"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-      Mon compte →
-    </a>
-  </div>
-  <div class="footer-copy">© 2025 Arich IPTV · Lecteur multimédia uniquement · Aucun contenu fourni</div>
-</footer>
+</div>
 
 <script>
-  // ── Custom cursor ────────────────────────────────────────────────────────
-  const cursor = document.getElementById('cursor');
-  const ring   = document.getElementById('cursor-ring');
-  let cx = 0, cy = 0, rx = 0, ry = 0;
-  document.addEventListener('mousemove', e => { cx = e.clientX; cy = e.clientY; });
-  document.querySelectorAll('a,button,.feat-card,.faq-q,.plan-card,.contact-chip,.phone-channel').forEach(el => {
-    el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
-    el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
-  });
-  (function animateCursor() {
-    rx += (cx - rx) * 0.12; ry += (cy - ry) * 0.12;
-    cursor.style.left = cx + 'px'; cursor.style.top = cy + 'px';
-    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
-    requestAnimationFrame(animateCursor);
-  })();
+const $ = id => document.getElementById(id);
 
-  // ── Scroll animation — système data-ani ─────────────────────────────────
-  // Principe : chaque élément [data-ani] démarre opacity:0 (CSS).
-  // Au scroll, dès qu'il entre dans le viewport, on lui ajoute .ani-go
-  // et on applique animation-delay via style inline (data-delay en ms).
-  // Aucun IntersectionObserver — on utilise getBoundingClientRect() sur scroll + load.
+// ---- STATE ----
+let state = {
+  server: '', user: '', pass: '',
+  categories: [], allVod: [], displayedVod: [],
+  currentCat: 'all', searchQuery: '',
+  currentTab: 'vod',
+  currentItem: null,
+  favorites: JSON.parse(localStorage.getItem('sv_favs') || '[]'),
+  page: 0, pageSize: 30,
+  seriesCategories: [], allSeries: []
+};
 
-  const aniEls = Array.from(document.querySelectorAll('[data-ani]'));
-
-  function checkAni() {
-    const wh = window.innerHeight;
-    aniEls.forEach(el => {
-      if (el.classList.contains('ani-go')) return; // déjà déclenché
-      const rect = el.getBoundingClientRect();
-      if (rect.top < wh - 40) {
-        const delay = el.dataset.delay || 0;
-        el.style.animationDelay = delay + 'ms';
-        el.classList.add('ani-go');
-      }
-    });
-  }
-
-  // Lancement au scroll et au resize
-  window.addEventListener('scroll', checkAni, { passive: true });
-  window.addEventListener('resize', checkAni, { passive: true });
-
-  // Lancement immédiat au chargement (éléments déjà visibles dès le départ)
-  // On attend que le DOM soit prêt + un micro-délai pour les layouts
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => setTimeout(checkAni, 50));
+// ---- UTILS ----
+const PROXY = url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+const api = (path, params='') => `${state.server}/player_api.php?username=${state.user}&password=${state.pass}&${path}${params}`;
+const saveFavs = () => localStorage.setItem('sv_favs', JSON.stringify(state.favorites));
+const isFav = item => state.favorites.some(f => f.stream_id === item.stream_id || f.series_id === item.series_id);
+const toggleFav = item => {
+  if(isFav(item)) {
+    state.favorites = state.favorites.filter(f => (f.stream_id||f.series_id) !== (item.stream_id||item.series_id));
   } else {
-    setTimeout(checkAni, 50);
+    state.favorites.push(item);
   }
+  saveFavs();
+};
 
-  // ── FAQ accordion ────────────────────────────────────────────────────────
-  function toggleFaq(el) {
-    const item = el.parentElement;
-    const isOpen = item.classList.contains('open');
-    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
-    if (!isOpen) item.classList.add('open');
-  }
-
-  // ── Contact avec plan pré-rempli ─────────────────────────────────────────
-  function openContact(plan) {
-    document.getElementById('fsubject').value = 'Activation licence — ' + plan;
-    document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
-    setTimeout(() => document.getElementById('fname').focus(), 800);
-  }
-
-  // ── Form submit → Formspree ──────────────────────────────────────────────
-  async function sendForm(e) {
-    e.preventDefault();
-    const name      = document.getElementById('fname').value.trim();
-    const email     = document.getElementById('femail').value.trim();
-    const subject   = document.getElementById('fsubject').value.trim() || 'Contact';
-    const deviceKey = document.getElementById('fdevicekey').value.trim();
-    const message   = document.getElementById('fmessage').value.trim();
-    if (!name || !email || !message) { showToast('⚠️ Remplissez tous les champs obligatoires'); return; }
-    try {
-      const res = await fetch('https://formspree.io/f/xgolqeyj', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({ name, email, subject, message, deviceKey: deviceKey || 'Non renseignée', _subject: `[Arich IPTV] ${subject}` }),
-      });
-      if (res.ok) { showToast('✓ Message envoyé !'); e.target.reset(); }
-      else { showToast('✗ Erreur, réessayez'); }
-    } catch { showToast('✗ Erreur réseau'); }
-  }
-
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg; t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3000);
-  }
-
-  // ── Tracking sessions site (Supabase) ───────────────────────────────────
-  const SUPABASE_URL  = 'https://aynucieohuowgkwyftiy.supabase.co';
-  const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF5bnVjaWVvaHVvd2drd3lmdGl5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyOTIxMDMsImV4cCI6MjA4Nzg2ODEwM30.H43CVcyzEuYBQfBIlkn16r5uk768isHr4DeLduo1ETk';
-  const _siteSession = { start: Date.now(), referrer: document.referrer || 'direct', path: location.pathname, country: null };
-  fetch('https://ipapi.co/json/').then(r => r.json()).then(d => { _siteSession.country = d.country_name || d.country; }).catch(() => {});
-
-  async function _sendSiteSession() {
-    const duration = Math.round((Date.now() - _siteSession.start) / 1000);
-    if (duration < 3) return;
-    try {
-      await fetch(`${SUPABASE_URL}/rest/v1/site_sessions`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON, 'Authorization': `Bearer ${SUPABASE_ANON}`, 'Prefer': 'return=minimal' },
-        body: JSON.stringify({ duration_seconds: duration, country: _siteSession.country, referrer: _siteSession.referrer, path: _siteSession.path, user_agent: navigator.userAgent, created_at: new Date().toISOString() }),
-      });
-    } catch {}
-  }
-  window.addEventListener('pagehide', _sendSiteSession);
-  window.addEventListener('beforeunload', _sendSiteSession);
-  async function startCheckout(plan) {
-  const btn = document.querySelector(`[data-plan="${plan}"]`)
-  btn.disabled = true
-  btn.textContent = 'Chargement...'
-
-  // Récupère la session Supabase si connecté
-  const { data: { session } } = await supabase.auth.getSession()
-
-  // Demande la device_key si pas connecté
-  const deviceKey = prompt('Entrez la clé de votre appareil\n(visible dans ARICH IPTV → Paramètres → Infos appareil)')
-  if (!deviceKey) { btn.disabled = false; btn.textContent = 'Acheter'; return }
-
-  const res = await fetch('https://aynucieohuowgkwyftiy.supabase.co/functions/v1/create-checkout', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      plan,
-      deviceKey: deviceKey.trim().toUpperCase(),
-      userId:  session?.user?.id  || null,
-      email:   session?.user?.email || null,
-    })
-  })
-
-  const data = await res.json()
-  if (data.error) {
-    alert('❌ ' + data.error)
-    btn.disabled = false
-    btn.textContent = 'Acheter'
-    return
-  }
-
-  window.location.href = data.url
+// ---- PROGRESS TRACKING ----
+const PROGRESS_KEY = 'sv_progress';
+function getAllProgress() { return JSON.parse(localStorage.getItem(PROGRESS_KEY) || '{}'); }
+function getProgress(id) { return getAllProgress()[String(id)] || null; }
+function saveProgress(id, current, duration, snap) {
+  const all = getAllProgress();
+  const pct = duration > 0 ? current / duration : 0;
+  if(current < 10 || pct > 0.97) { delete all[String(id)]; }
+  else { all[String(id)] = { position: current, duration, pct, ts: Date.now(), item: snap }; }
+  localStorage.setItem(PROGRESS_KEY, JSON.stringify(all));
 }
+function formatTime(s) {
+  s = Math.floor(s);
+  const h = Math.floor(s/3600), m = Math.floor((s%3600)/60), sec = s%60;
+  if(h > 0) return `${h}h${String(m).padStart(2,'0')}m`;
+  return `${m}m${String(sec).padStart(2,'0')}s`;
+}
+
+// ---- LOGIN ----
+function tryLoadSaved() {
+  const saved = localStorage.getItem('sv_creds');
+  if(saved) {
+    const c = JSON.parse(saved);
+    state.server = c.server; state.user = c.user; state.pass = c.pass;
+    return true;
+  }
+  return false;
+}
+
+$('loginBtn').onclick = async () => {
+  const url = $('loginUrl').value.trim().replace(/\/+$/,'');
+  const user = $('loginUser').value.trim();
+  const pass = $('loginPass').value.trim();
+  if(!url||!user||!pass){ $('loginError').textContent='Tous les champs sont requis.'; return; }
+  $('loginBtn').textContent = 'Connexion…';
+  $('loginError').textContent = '';
+  state.server = url; state.user = user; state.pass = pass;
+  try {
+    await loadApp();
+    localStorage.setItem('sv_creds', JSON.stringify({server:url, user, pass}));
+  } catch(e) {
+    $('loginError').textContent = 'Connexion échouée. Vérifiez vos identifiants.';
+    $('loginBtn').textContent = 'Se connecter';
+  }
+};
+
+// ---- LOAD APP ----
+async function loadApp() {
+  showScreen('appScreen');
+  $('setServer').textContent = state.server.replace(/https?:\/\//,'').substring(0,20)+'…';
+  $('setUser').textContent = state.user;
+  await loadVodCategories();
+}
+
+async function loadVodCategories() {
+  showLoading('Chargement des catégories…');
+  const res = await fetch(api('action=get_vod_categories'));
+  const cats = await res.json();
+  state.categories = [{category_id:'all', category_name:'Tout'}, ...cats];
+  renderCatTabs();
+  await loadVodByCategory('all');
+}
+
+async function loadVodByCategory(catId) {
+  state.currentCat = catId; state.page = 0;
+  showLoading('Chargement des films…');
+  const param = catId === 'all' ? '' : `&category_id=${catId}`;
+  const res = await fetch(api('action=get_vod_streams', param));
+  const vods = await res.json();
+  state.allVod = vods;
+  applyFilter();
+}
+
+async function loadSeriesCategories() {
+  showLoading('Chargement des séries…');
+  try {
+    const [catRes, serRes] = await Promise.all([
+      fetch(api('action=get_series_categories')),
+      fetch(api('action=get_series'))
+    ]);
+    state.seriesCategories = [{category_id:'all', category_name:'Tout'}, ...await catRes.json()];
+    state.allSeries = await serRes.json();
+    renderCatTabs(true);
+    applyFilter();
+  } catch(e) { showEmpty('Impossible de charger les séries.'); }
+}
+
+function applyFilter() {
+  const q = state.searchQuery.toLowerCase();
+  const src = state.currentTab === 'series' ? state.allSeries : state.allVod;
+  const nameKey = state.currentTab === 'series' ? 'name' : 'name';
+  let filtered = src;
+  if(state.currentCat !== 'all') {
+    filtered = filtered.filter(v => v.category_id == state.currentCat);
+  }
+  if(q) filtered = filtered.filter(v => (v.name||'').toLowerCase().includes(q));
+  state.displayedVod = filtered;
+  state.page = 0;
+  renderGrid();
+}
+
+// ---- RENDER ----
+function renderCatTabs(isSeries=false) {
+  const cats = isSeries ? state.seriesCategories : state.categories;
+  $('catTabs').innerHTML = cats.map(c => `
+    <button class="cat-tab${c.category_id==state.currentCat?' active':''}" data-id="${c.category_id}">
+      ${c.category_name}
+    </button>
+  `).join('');
+  $('catTabs').querySelectorAll('.cat-tab').forEach(btn => {
+    btn.onclick = () => {
+      if(state.currentTab === 'series') {
+        state.currentCat = btn.dataset.id;
+        renderCatTabs(true);
+        applyFilter();
+      } else {
+        loadVodByCategory(btn.dataset.id);
+      }
+    };
+  });
+}
+
+function renderGrid() {
+  const area = $('contentArea');
+  const items = state.displayedVod;
+  const isSeries = state.currentTab === 'series';
+
+  if(!items.length) { showEmpty('Aucun contenu trouvé.'); return; }
+
+  const slice = items.slice(0, (state.page+1) * state.pageSize);
+  const favs = state.favorites;
+
+  // Favorites row (top section, only when searching nothing + all cats)
+  let favsHtml = '';
+  if(favs.length && !state.searchQuery && state.currentCat === 'all') {
+    favsHtml = `<div class="section-title">⭐ Mes Favoris</div>
+    <div class="fav-row">
+      ${favs.slice(0,10).map(f => {
+        const cover = f.cover || f.series_cover || '';
+        const title = f.name || f.title || 'Sans titre';
+        return `<div class="fav-card" data-id="${f.stream_id||f.series_id}" data-type="${f.series_id?'series':'vod'}">
+          <img src="${cover}" onerror="this.style.opacity=.3" loading="lazy">
+          <div class="fav-title">${title}</div>
+        </div>`;
+      }).join('')}
+    </div>`;
+  }
+
+  const gridHtml = slice.map(v => {
+    const cover = v.stream_icon || v.cover || v.series_cover || '';
+    const name = v.name || v.title || 'Sans titre';
+    const rating = v.rating ? `⭐ ${parseFloat(v.rating).toFixed(1)}` : '';
+    const fav = isFav(v) ? '<div class="fav-badge">★</div>' : '';
+    const prog = getProgress(v.stream_id || v.series_id);
+    const progBar = prog ? `<div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${Math.round(prog.pct*100)}%"></div></div>` : '';
+    return `<div class="vod-card" data-id="${v.stream_id||v.series_id}" data-type="${v.series_id?'series':'vod'}">
+      <img src="${cover}" onerror="this.style.display='none'" loading="lazy">
+      ${fav}${progBar}
+      <div class="vod-info">
+        <div class="vod-name">${name}</div>
+        ${rating ? `<div class="vod-rating">${rating}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+
+  const loadMore = slice.length < items.length
+    ? `<button class="load-more-btn" id="loadMoreBtn">Charger plus (${items.length - slice.length} restants)</button>` : '';
+
+  area.innerHTML = favsHtml + `<div class="section-title">${isSeries ? '📺 Séries' : '🎬 Films'} <span style="color:var(--muted);font-size:10px">(${items.length})</span></div><div class="vod-grid">${gridHtml}</div>${loadMore}`;
+
+  // Events
+  area.querySelectorAll('.vod-card, .fav-card').forEach(card => {
+    card.onclick = () => openDetail(card.dataset.id, card.dataset.type);
+  });
+  const lm = $('loadMoreBtn');
+  if(lm) lm.onclick = () => { state.page++; renderGrid(); };
+}
+
+function showLoading(msg='Chargement…') {
+  $('contentArea').innerHTML = `<div class="spinner-wrap"><div class="spinner"></div><p>${msg}</p></div>`;
+}
+function showEmpty(msg) {
+  $('contentArea').innerHTML = `<div class="empty-state"><div class="ico">🎬</div><p>${msg}</p></div>`;
+}
+
+// ---- DETAIL ----
+async function openDetail(id, type='vod') {
+  showScreen('detailScreen');
+  $('detailTitle').textContent = '…';
+  $('detailPlot').textContent = '';
+  $('detailMeta').innerHTML = '';
+  $('detailPoster').src = '';
+
+  try {
+    let info;
+    if(type === 'series') {
+      const res = await fetch(api(`action=get_series_info&series_id=${id}`));
+      info = await res.json();
+      const s = info.info || {};
+      state.currentItem = { ...s, series_id: id, isSeries: true };
+      $('detailTitle').textContent = s.name || 'Série';
+      $('detailPoster').src = s.cover || '';
+      $('detailMeta').innerHTML = [
+        s.genre ? `<span class="badge">${s.genre}</span>` : '',
+        s.rating ? `<span class="badge gold">⭐ ${parseFloat(s.rating).toFixed(1)}</span>` : '',
+        s.releaseDate ? `<span class="badge">${s.releaseDate.substring(0,4)}</span>` : '',
+      ].filter(Boolean).join('');
+      $('detailPlot').textContent = s.plot || '';
+    } else {
+      const res = await fetch(api(`action=get_vod_info&vod_id=${id}`));
+      info = await res.json();
+      const m = info.info || {};
+      const s = info.movie_data || {};
+      state.currentItem = { ...s, ...m, stream_id: id, isSeries: false };
+      $('detailTitle').textContent = m.name || s.name || 'Film';
+      $('detailPoster').src = m.cover_big || m.movie_image || s.stream_icon || '';
+      $('detailMeta').innerHTML = [
+        m.genre ? `<span class="badge">${m.genre}</span>` : '',
+        m.rating ? `<span class="badge gold">⭐ ${parseFloat(m.rating).toFixed(1)}</span>` : '',
+        m.releasedate ? `<span class="badge">${m.releasedate.substring(0,4)}</span>` : '',
+        m.duration ? `<span class="badge">⏱ ${m.duration}</span>` : '',
+      ].filter(Boolean).join('');
+      $('detailPlot').textContent = m.plot || '';
+    }
+    updateFavBtn();
+    // Show resume info on play button if in progress
+    const prog = getProgress(type === 'series' ? id : id);
+    if(prog) {
+      $('detailPlay').textContent = `▶ Reprendre (à ${formatTime(prog.position)})`;
+    } else {
+      $('detailPlay').textContent = '▶ Regarder';
+    }
+  } catch(e) {
+    $('detailPlot').textContent = 'Impossible de charger les détails.';
+  }
+}
+
+function updateFavBtn() {
+  const btn = $('detailFavBtn');
+  if(isFav(state.currentItem)) {
+    btn.textContent = '★ Retirer des favoris'; btn.classList.add('active');
+  } else {
+    btn.textContent = '☆ Ajouter aux favoris'; btn.classList.remove('active');
+  }
+}
+
+$('detailFavBtn').onclick = () => { toggleFav(state.currentItem); updateFavBtn(); renderFavsCount(); };
+
+$('detailPlay').onclick = () => {
+  const item = state.currentItem;
+  if(item.isSeries) {
+    alert('Sélection d\'épisodes : fonctionnalité avancée. Utilisez la recherche dans les détails.');
+    return;
+  }
+  const ext = item.container_extension || 'mkv';
+  const url = `${state.server}/movie/${state.user}/${state.pass}/${item.stream_id}.${ext}`;
+  const prog = getProgress(item.stream_id);
+  playStream(url, item.name || item.title || 'Film', item, prog ? prog.position : 0);
+};
+
+let progressInterval = null;
+
+// ---- PLAYER ----
+function playStream(url, title, item, startAt=0) {
+  showScreen('playerScreen');
+  $('playerTitle').textContent = title;
+  $('playerInfoTitle').textContent = title;
+  $('playerInfoMeta').textContent = item.genre || '';
+  const v = $('videoEl');
+  v.src = url;
+
+  const streamId = String(item.stream_id || item.series_id || '');
+  const snap = {
+    name: item.name || item.title || title,
+    cover: item.cover_big || item.movie_image || item.stream_icon || item.cover || '',
+    stream_id: item.stream_id, series_id: item.series_id,
+    genre: item.genre || '', isSeries: !!item.isSeries
+  };
+
+  v.onloadedmetadata = () => { if(startAt > 0) v.currentTime = startAt; v.play().catch(()=>{}); };
+
+  clearInterval(progressInterval);
+  progressInterval = setInterval(() => {
+    if(!v.paused && v.duration > 0) saveProgress(streamId, v.currentTime, v.duration, snap);
+  }, 5000);
+  v.onpause = () => { if(v.duration > 0) saveProgress(streamId, v.currentTime, v.duration, snap); };
+  v.onended = () => {
+    const all = getAllProgress(); delete all[streamId];
+    localStorage.setItem(PROGRESS_KEY, JSON.stringify(all));
+  };
+
+  updatePlayerFavBtn(item);
+}
+
+function updatePlayerFavBtn(item) {
+  $('playerFavBtn').textContent = isFav(item) ? '★' : '☆';
+  $('playerFavBtn').onclick = () => { toggleFav(item); updatePlayerFavBtn(item); };
+}
+
+$('playerBack').onclick = () => {
+  $('videoEl').pause(); $('videoEl').src = '';
+  showScreen('detailScreen');
+};
+
+// ---- EN COURS TAB ----
+function renderEnCoursTab() {
+  $('catTabs').innerHTML = '';
+  const area = $('contentArea');
+  const all = getAllProgress();
+  const entries = Object.entries(all).sort((a,b) => b[1].ts - a[1].ts);
+  if(!entries.length) {
+    area.innerHTML = `<div class="empty-state"><div class="ico">▶️</div><p>Aucun contenu en cours.<br>Commencez à regarder un film ou une série !</p></div>`;
+    return;
+  }
+  const html = entries.map(([id, prog]) => {
+    const it = prog.item || {};
+    const cover = it.cover || '';
+    const name = it.name || 'Sans titre';
+    const pct = Math.round((prog.pct || 0) * 100);
+    const left = prog.duration > 0 ? formatTime(prog.duration - prog.position) : '';
+    const type = it.series_id ? 'series' : 'vod';
+    return `<div class="encours-card" data-id="${id}" data-type="${type}" data-pos="${prog.position}">
+      <img src="${cover}" onerror="this.style.opacity=.3" loading="lazy">
+      <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+      <div class="encours-info">
+        <div class="encours-name">${name}</div>
+        <div class="encours-time">${left ? `−${left}` : `${pct}%`}</div>
+      </div>
+    </div>`;
+  }).join('');
+  area.innerHTML = `<div class="section-title">▶ En cours (${entries.length})</div><div class="encours-row">${html}</div>`;
+  area.querySelectorAll('.encours-card').forEach(card => {
+    card.onclick = () => {
+      const pos = parseFloat(card.dataset.pos) || 0;
+      openDetailAndResume(card.dataset.id, card.dataset.type, pos);
+    };
+  });
+}
+
+async function openDetailAndResume(id, type, startAt) {
+  await openDetail(id, type);
+  // Auto-set start position on play button
+  $('detailPlay').onclick = () => {
+    const item = state.currentItem;
+    if(item.isSeries) { alert('Reprise de série : sélectionnez l\'épisode manuellement.'); return; }
+    const ext = item.container_extension || 'mkv';
+    const url = `${state.server}/movie/${state.user}/${state.pass}/${item.stream_id}.${ext}`;
+    playStream(url, item.name || item.title || 'Film', item, startAt);
+  };
+}
+
+// ---- FAVORITES TAB ----
+function renderFavsTab() {
+  $('catTabs').innerHTML = '';
+  const area = $('contentArea');
+  if(!state.favorites.length) { showEmpty('Aucun favori pour l\'instant.'); return; }
+  const html = state.favorites.map(f => {
+    const cover = f.cover || f.stream_icon || f.series_cover || '';
+    const name = f.name || f.title || 'Sans titre';
+    const rating = f.rating ? `⭐ ${parseFloat(f.rating).toFixed(1)}` : '';
+    const type = f.series_id ? 'series' : 'vod';
+    return `<div class="vod-card" data-id="${f.stream_id||f.series_id}" data-type="${type}">
+      <img src="${cover}" onerror="this.style.display='none'" loading="lazy">
+      <div class="fav-badge">★</div>
+      <div class="vod-info">
+        <div class="vod-name">${name}</div>
+        ${rating ? `<div class="vod-rating">${rating}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+  area.innerHTML = `<div class="section-title">⭐ Mes Favoris (${state.favorites.length})</div><div class="vod-grid">${html}</div>`;
+  area.querySelectorAll('.vod-card').forEach(card => {
+    card.onclick = () => openDetail(card.dataset.id, card.dataset.type);
+  });
+}
+
+function renderFavsCount() {
+  $('setFavCount').textContent = state.favorites.length;
+}
+
+// ---- TABS ----
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.onclick = () => {
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    item.classList.add('active');
+    state.currentTab = item.dataset.tab;
+    state.currentCat = 'all';
+    state.searchQuery = '';
+    $('searchInput').value = '';
+    if(state.currentTab === 'encours') { renderEnCoursTab(); }
+    else if(state.currentTab === 'favs') { renderFavsTab(); }
+    else if(state.currentTab === 'series') { loadSeriesCategories(); }
+    else { renderCatTabs(); applyFilter(); }
+  };
+});
+
+// ---- SEARCH ----
+let searchTimer;
+$('searchInput').oninput = e => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => {
+    state.searchQuery = e.target.value;
+    if(state.currentTab === 'favs') renderFavsTab();
+    else applyFilter();
+  }, 300);
+};
+
+// ---- SCREENS ----
+function showScreen(id) {
+  ['loginScreen','appScreen','detailScreen','playerScreen'].forEach(s => {
+    $(s).classList.toggle('hidden', s !== id);
+  });
+}
+
+$('detailBack').onclick = () => showScreen('appScreen');
+
+// ---- SETTINGS ----
+$('settingsBtn').onclick = () => {
+  renderFavsCount();
+  $('setExpiry').textContent = '—';
+  $('settingsPanel').classList.remove('hidden');
+};
+$('closeSettings').onclick = () => $('settingsPanel').classList.add('hidden');
+$('settingsPanel').onclick = e => { if(e.target === $('settingsPanel')) $('settingsPanel').classList.add('hidden'); };
+$('logoutBtn').onclick = () => {
+  localStorage.removeItem('sv_creds');
+  location.reload();
+};
+
+// ---- INIT ----
+(async () => {
+  if(tryLoadSaved()) {
+    try { await loadApp(); } catch(e) { localStorage.removeItem('sv_creds'); }
+  }
+})();
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
