@@ -1,188 +1,61 @@
-
-<!DOCTYPE html>
-<html lang="fr">
+<!DOCTYPE html><html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>SKY TV | Premium IPTV</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: system-ui, sans-serif; background: #0A0A1A; color: white; }
-        .header { background: linear-gradient(135deg, #0A0A2A, #0F0F3A); padding: 25px; text-align: center; }
-        .logo { font-size: 36px; font-weight: 800; color: #00BFFF; }
-        .sub { font-size: 10px; color: #888; }
-        .tabs { display: flex; background: #111; padding: 12px; gap: 8px; }
-        .tab { flex: 1; text-align: center; padding: 12px; border-radius: 30px; font-weight: bold; cursor: pointer; color: #888; background: #1a1a2a; }
-        .tab.active { background: linear-gradient(135deg, #00BFFF, #1E90FF); color: white; }
-        .login-card { margin: 20px; padding: 25px; background: #0F0F2A; border-radius: 25px; }
-        input { width: 100%; padding: 14px; margin: 8px 0; background: #1a1a2a; border: 1px solid #2a2a3a; border-radius: 12px; color: white; }
-        button { width: 100%; padding: 15px; background: linear-gradient(135deg, #00BFFF, #1E90FF); border: none; border-radius: 30px; color: white; font-weight: bold; cursor: pointer; }
-        .channels-area { padding: 15px; max-height: 55vh; overflow-y: auto; }
-        .channel-card { background: #1a1a2a; padding: 12px; margin: 5px 0; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 10px; }
-        .channel-card:active { background: #00BFFF; }
-        .player-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 1000; display: none; flex-direction: column; }
-        .player-modal.active { display: flex; }
-        .player-header { padding: 15px; background: #111; display: flex; justify-content: space-between; }
-        .close-player { font-size: 24px; cursor: pointer; }
-        video { width: 100%; flex: 1; }
-        .loading { text-align: center; padding: 40px; color: #00BFFF; }
-        .error { text-align: center; padding: 30px; color: #FF4757; background: rgba(255,71,87,0.1); border-radius: 20px; margin: 15px; }
-        .info { text-align: center; padding: 20px; color: #888; font-size: 12px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SKY TV Corrigé</title>
+<style>
+body { font-family: Arial; background:#0A0A1A; color:#fff; }
+input, button { padding:10px; margin:5px; width:100%; }
+.channel { padding:10px; background:#1a1a2a; margin:5px 0; cursor:pointer; }
+</style>
 </head>
-<body>
+<body><h2>📺 SKY TV</h2><input id="server" placeholder="Serveur">
+<input id="user" placeholder="User">
+<input id="pass" placeholder="Password">
+<button onclick="connect()">Connexion</button><div id="list"></div><video id="video" controls style="width:100%; margin-top:10px"></video>
 
-    <div class="header">
-        <div class="logo">☁️ SKY TV</div>
-        <div class="sub">PREMIUM IPTV EXPERIENCE</div>
-    </div>
+<script>
+let proxy = "https://api.allorigins.win/raw?url=";
 
-    <div class="tabs">
-        <div class="tab active" onclick="switchTab('channels')">📺 CHAÎNES</div>
-        <div class="tab" onclick="switchTab('movies')">🎬 FILMS</div>
-        <div class="tab" onclick="switchTab('favorites')">⭐ FAVORIS</div>
-    </div>
+async function connect(){
+  const server = document.getElementById('server').value.replace(/\/$/, '');
+  const user = document.getElementById('user').value;
+  const pass = document.getElementById('pass').value;
+  const list = document.getElementById('list');
 
-    <div id="loginCard" class="login-card">
-        <div class="info">📡 Entrez vos identifiants Xtream</div>
-        <input type="text" id="serverUrl" placeholder="URL du serveur">
-        <input type="text" id="username" placeholder="Nom d'utilisateur">
-        <input type="password" id="password" placeholder="Mot de passe">
-        <button onclick="connect()">🔌 SE CONNECTER</button>
-    </div>
+  if(!server || !user || !pass){
+    list.innerHTML = "❌ Remplis tout";
+    return;
+  }
 
-    <div id="channelsList" class="channels-area">
-        <div class="loading">✨ Entrez vos identifiants</div>
-    </div>
+  list.innerHTML = "⏳ Chargement...";
 
-    <div id="playerModal" class="player-modal">
-        <div class="player-header">
-            <span id="playerTitle">SKY TV Player</span>
-            <span class="close-player" onclick="closePlayer()">✕</span>
-        </div>
-        <video id="videoPlayer" controls></video>
-    </div>
+  try{
+    const url = `${server}/player_api.php?username=${user}&password=${pass}&action=get_live_streams`;
+    const res = await fetch(proxy + encodeURIComponent(url));
+    const data = await res.json();
 
-    <script>
-        let channels = [], favorites = JSON.parse(localStorage.getItem('skytv_fav') || '[]');
-        let currentTab = 'channels';
+    if(!Array.isArray(data)) throw new Error("Pas de chaînes");
 
-        async function connect() {
-            const listDiv = document.getElementById('channelsList');
-            const server = document.getElementById('serverUrl').value;
-            const user = document.getElementById('username').value;
-            const pass = document.getElementById('password').value;
-            
-            if (!server || !user || !pass) {
-                listDiv.innerHTML = '<div class="error">❌ Remplissez tous les champs</div>';
-                return;
-            }
-            
-            listDiv.innerHTML = '<div class="loading">🔄 Connexion à SKY TV...</div>';
-            
-            // Nettoyer l'URL
-            const cleanServer = server.replace(/\/$/, '');
-            
-            // Construire l'URL API
-            const apiUrl = `${cleanServer}/player_api.php?username=${user}&password=${pass}`;
-            
-            try {
-                // Utiliser fetch normal (sans proxy) mais avec des headers spécifiques
-                const response = await fetch(apiUrl, {
-                    method: 'GET',
-                    headers: {
-                        'User-Agent': 'IBO Player Pro/1.0 (Android)',
-                        'Origin': cleanServer,
-                        'Referer': cleanServer
-                    }
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
-                }
-                
-                const data = await response.json();
-                
-                if (data.user_info) {
-                    channels = [];
-                    
-                    // Charger les chaînes
-                    if (data.live && data.live.length > 0) {
-                        channels = data.live.map(ch => ({
-                            name: ch.name,
-                            url: `${cleanServer}/live/${user}/${pass}/${ch.stream_id}.ts`,
-                            group: ch.category_name || 'Général'
-                        }));
-                    }
-                    
-                    if (channels.length === 0 && data.vod) {
-                        // Si pas de live, chercher les VOD
-                        channels = data.vod.map(v => ({
-                            name: v.name,
-                            url: `${cleanServer}/movie/${user}/${pass}/${v.stream_id}.mp4`,
-                            group: v.category_name || 'Films'
-                        }));
-                    }
-                    
-                    if (channels.length > 0) {
-                        document.getElementById('loginCard').style.display = 'none';
-                        localStorage.setItem('skytv_server', server);
-                        localStorage.setItem('skytv_user', user);
-                        displayChannels();
-                    } else {
-                        throw new Error('Aucune chaîne trouvée');
-                    }
-                } else {
-                    throw new Error('Identifiants invalides');
-                }
-                
-            } catch(e) {
-                listDiv.innerHTML = `<div class="error">❌ Erreur: ${e.message}<br><br>📋 Vérifiez vos identifiants :<br>Serveur: ${cleanServer}<br>User: ${user}</div>`;
-            }
-        }
+    list.innerHTML = "";
 
-        function displayChannels() {
-            let html = `<div class="info">📺 ${channels.length} chaînes</div>`;
-            channels.forEach(ch => {
-                html += `<div class="channel-card" onclick="playChannel('${ch.url.replace(/'/g, "\\'")}')">
-                    <span>📺</span>
-                    <span>${ch.name}</span>
-                </div>`;
-            });
-            document.getElementById('channelsList').innerHTML = html;
-        }
+    data.forEach(ch => {
+      const div = document.createElement('div');
+      div.className = 'channel';
+      div.innerText = ch.name;
+      div.onclick = () => play(`${server}/live/${user}/${pass}/${ch.stream_id}.ts`);
+      list.appendChild(div);
+    });
 
-        function playChannel(url) {
-            const modal = document.getElementById('playerModal');
-            const video = document.getElementById('videoPlayer');
-            document.getElementById('playerTitle').innerText = 'Lecture en cours';
-            video.src = url;
-            video.play();
-            modal.classList.add('active');
-        }
+  }catch(e){
+    list.innerHTML = "❌ Erreur : " + e.message;
+  }
+}
 
-        function closePlayer() {
-            const video = document.getElementById('videoPlayer');
-            video.pause();
-            video.src = '';
-            document.getElementById('playerModal').classList.remove('active');
-        }
-
-        function switchTab(tab) {
-            currentTab = tab;
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            event.target.classList.add('active');
-            if (tab === 'channels') displayChannels();
-        }
-        
-        // Chargement auto
-        const savedServer = localStorage.getItem('skytv_server');
-        const savedUser = localStorage.getItem('skytv_user');
-        if (savedServer && savedUser) {
-            document.getElementById('serverUrl').value = savedServer;
-            document.getElementById('username').value = savedUser;
-            connect();
-        }
-    </script>
-</body>
+function play(url){
+  const video = document.getElementById('video');
+  video.src = url;
+  video.play();
+}
+</script></body>
 </html>
