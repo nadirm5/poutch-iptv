@@ -3,192 +3,280 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Poutch IPTV - Lecteur</title>
+    <title>NEXUS TV | IPTV Premium</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
-            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-            background: #0a0a0a;
-            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #000000;
+            color: #ffffff;
         }
+
+        /* Header */
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
             padding: 20px;
             text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-        .header h1 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
+
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff4757, #1e90ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
-        .header p {
-            font-size: 0.8rem;
-            opacity: 0.9;
+
+        .sub {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
         }
-        .url-input-section {
+
+        /* Zone URL */
+        .url-zone {
             padding: 15px;
-            background: #1a1a1a;
+            background: #0a0a0a;
         }
+
         .url-input {
             width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 25px;
-            background: #2a2a2a;
+            padding: 15px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 30px;
             color: white;
             font-size: 14px;
-            text-align: center;
+            font-family: monospace;
         }
-        .url-input::placeholder {
-            color: #888;
+
+        .url-input:focus {
+            outline: none;
+            border-color: #ff4757;
         }
-        .controls {
-            padding: 15px;
+
+        /* Boutons */
+        .buttons {
             display: flex;
             gap: 10px;
+            margin-top: 15px;
             flex-wrap: wrap;
-            justify-content: center;
-            background: #1a1a1a;
-            border-bottom: 1px solid #2a2a2a;
         }
+
         button {
-            padding: 10px 20px;
+            flex: 1;
+            padding: 12px;
             border: none;
-            border-radius: 25px;
-            font-size: 14px;
+            border-radius: 30px;
             font-weight: bold;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: all 0.2s;
         }
-        button:active {
-            transform: scale(0.95);
-        }
+
         .btn-load {
-            background: #667eea;
+            background: linear-gradient(135deg, #ff4757, #ff6b81);
             color: white;
         }
+
         .btn-play {
-            background: #10b981;
+            background: linear-gradient(135deg, #1e90ff, #00b4ff);
             color: white;
         }
+
         .btn-stop {
-            background: #ef4444;
+            background: #333;
             color: white;
         }
-        .player-container {
-            background: #000;
-            position: relative;
+
+        button:active {
+            transform: scale(0.96);
         }
+
+        /* Player */
+        .player-area {
+            background: #000;
+            margin: 10px;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
         video {
             width: 100%;
             height: auto;
-            max-height: 45vh;
+            max-height: 40vh;
             background: #000;
         }
-        .channels {
-            padding: 15px;
-            max-height: 45vh;
-            overflow-y: auto;
-        }
-        .channel-group {
-            margin-bottom: 15px;
-        }
-        .group-title {
-            background: #2a2a2a;
-            padding: 10px;
-            border-radius: 10px;
-            font-weight: bold;
-            margin-bottom: 8px;
-            color: #667eea;
-        }
-        .channel-item {
-            background: #1a1a1a;
-            padding: 12px;
-            margin: 5px 0;
-            border-radius: 10px;
+
+        /* Current channel */
+        .current {
+            background: rgba(255,71,87,0.2);
+            margin: 0 10px;
+            padding: 10px 15px;
+            border-radius: 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            cursor: pointer;
-            transition: background 0.2s;
         }
-        .channel-item:active {
-            background: #2a2a2a;
-        }
-        .channel-name {
+
+        .current-name {
             font-size: 14px;
+            font-weight: 500;
+        }
+
+        .current-badge {
+            background: #ff4757;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        /* Search bar */
+        .search-box {
+            padding: 15px;
+            background: #0a0a0a;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 15px;
+            background: #1a1a1a;
+            border: none;
+            border-radius: 30px;
+            color: white;
+            font-size: 14px;
+        }
+
+        /* Channels list */
+        .channels-list {
+            padding: 10px;
+            max-height: 45vh;
+            overflow-y: auto;
+        }
+
+        .group {
+            margin-bottom: 20px;
+        }
+
+        .group-title {
+            background: #1a1a1a;
+            padding: 10px 15px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 8px;
+            border-left: 3px solid #ff4757;
+        }
+
+        .channel {
+            background: #111;
+            padding: 12px 15px;
+            margin: 5px 0;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .channel:active {
+            background: #1e1e1e;
+            transform: scale(0.98);
+        }
+
+        .channel-icon {
+            font-size: 20px;
+        }
+
+        .channel-name {
             flex: 1;
+            font-size: 14px;
+            font-weight: 500;
         }
+
         .channel-logo {
-            width: 30px;
-            height: 30px;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
             object-fit: contain;
-            background: #2a2a2a;
-            border-radius: 5px;
+            background: #222;
         }
-        .info {
+
+        .info-message {
             text-align: center;
-            padding: 20px;
-            color: #888;
-            font-size: 12px;
+            padding: 40px;
+            color: #666;
         }
+
         .loading {
             text-align: center;
-            padding: 20px;
-            color: #667eea;
+            padding: 40px;
+            color: #ff4757;
         }
-        .current-channel {
-            background: #2a2a2a;
-            padding: 8px 15px;
+
+        /* Stats */
+        .stats {
             text-align: center;
+            padding: 15px;
             font-size: 12px;
-            color: #10b981;
+            color: #444;
+            border-top: 1px solid #111;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
+
     <div class="header">
-        <h1>📺 Poutch IPTV</h1>
-        <p>Lecteur IPTV gratuit</p>
+        <div class="logo">⚡ NEXUS TV</div>
+        <div class="sub">Ultra Fast IPTV Player</div>
     </div>
-    
-    <div class="url-input-section">
-        <input type="text" id="m3uUrl" class="url-input" placeholder="Collez votre lien M3U ici">
+
+    <div class="url-zone">
+        <input type="text" id="m3uUrl" class="url-input" placeholder="📡 Collez votre lien M3U ou URL Xtream">
+        <div class="buttons">
+            <button class="btn-load" onclick="loadPlaylist()">📥 CHARGER</button>
+            <button class="btn-play" onclick="playCurrent()">▶️ PLAY</button>
+            <button class="btn-stop" onclick="stopVideo()">⏹️ STOP</button>
+        </div>
     </div>
-    
-    <div class="controls">
-        <button class="btn-load" onclick="loadPlaylist()">📋 Charger</button>
-        <button class="btn-play" onclick="playCurrentChannel()">▶️ Play</button>
-        <button class="btn-stop" onclick="stopVideo()">⏹️ Stop</button>
-    </div>
-    
-    <div class="player-container">
+
+    <div class="player-area">
         <video id="videoPlayer" controls></video>
     </div>
-    
-    <div id="currentChannelDisplay" class="current-channel" style="display: none;">
-        📺 <span id="currentChannelName"></span>
+
+    <div id="currentInfo" class="current" style="display: none;">
+        <span class="current-name">📺 <span id="currentChannelName">Aucune</span></span>
+        <span class="current-badge">EN DIRECT</span>
     </div>
-    
-    <div id="channelsList" class="channels">
-        <div class="info">📡 Collez un lien M3U et cliquez sur "Charger"</div>
+
+    <div class="search-box">
+        <input type="text" id="searchInput" class="search-input" placeholder="🔍 Rechercher une chaîne..." onkeyup="searchChannels()">
     </div>
-    
-    <div class="info">
-        💡 Astuce : Collez votre playlist M3U (lien fourni par votre abonnement)
+
+    <div id="channelsList" class="channels-list">
+        <div class="info-message">✨ Collez votre playlist M3U et cliquez sur CHARGER</div>
     </div>
+
+    <div class="stats" id="stats"></div>
 
     <script>
         let channels = [];
+        let filteredChannels = [];
         let currentChannel = null;
         let videoPlayer = document.getElementById('videoPlayer');
-        
+
         function parseM3U(content) {
             const lines = content.split('\n');
-            const channels = [];
+            const result = [];
             
             for (let i = 0; i < lines.length; i++) {
                 let line = lines[i].trim();
@@ -196,12 +284,12 @@
                     let info = line.substring(8);
                     let groupMatch = info.match(/group-title="([^"]*)"/);
                     let logoMatch = info.match(/tvg-logo="([^"]*)"/);
-                    let name = info.split(',')[1] || 'Chaîne sans nom';
+                    let name = info.split(',')[1] || 'Sans nom';
                     
                     let url = lines[i + 1] ? lines[i + 1].trim() : '';
                     
-                    if (url && !url.startsWith('#') && url.startsWith('http')) {
-                        channels.push({
+                    if (url && (url.startsWith('http') || url.startsWith('https'))) {
+                        result.push({
                             name: name,
                             url: url,
                             group: groupMatch ? groupMatch[1] : 'Général',
@@ -210,30 +298,74 @@
                     }
                 }
             }
-            return channels;
+            return result;
         }
-        
+
+        function parseXtream(content, serverUrl, username, password) {
+            try {
+                const data = JSON.parse(content);
+                const result = [];
+                
+                if (data.channels) {
+                    data.channels.forEach(ch => {
+                        result.push({
+                            name: ch.name,
+                            url: `${serverUrl}/live/${username}/${password}/${ch.stream_id}.ts`,
+                            group: ch.category_name || 'Général',
+                            logo: ch.stream_icon || ''
+                        });
+                    });
+                }
+                return result;
+            } catch(e) {
+                return [];
+            }
+        }
+
+        function detectUrlType(url) {
+            if (url.includes('get.php') && url.includes('username') && url.includes('password')) {
+                const urlParams = new URLSearchParams(url.split('?')[1]);
+                const serverUrl = url.split('/get.php')[0];
+                const username = urlParams.get('username');
+                const password = urlParams.get('password');
+                return { type: 'xtream', serverUrl, username, password };
+            }
+            return { type: 'm3u' };
+        }
+
         function displayChannels() {
             const container = document.getElementById('channelsList');
-            if (!channels.length) {
-                container.innerHTML = '<div class="info">❌ Aucune chaîne trouvée dans la playlist</div>';
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            let channelsToShow = filteredChannels.length ? filteredChannels : channels;
+            
+            if (searchTerm) {
+                channelsToShow = channelsToShow.filter(ch => 
+                    ch.name.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            if (!channelsToShow.length) {
+                container.innerHTML = '<div class="info-message">📭 Aucune chaîne trouvée</div>';
+                document.getElementById('stats').innerHTML = `📊 0 chaîne • ${channels.length} au total`;
                 return;
             }
             
             const groups = {};
-            channels.forEach(ch => {
+            channelsToShow.forEach(ch => {
                 if (!groups[ch.group]) groups[ch.group] = [];
                 groups[ch.group].push(ch);
             });
             
             let html = '';
             for (let group in groups) {
-                html += `<div class="channel-group">`;
+                html += `<div class="group">`;
                 html += `<div class="group-title">📁 ${group}</div>`;
                 groups[group].forEach(ch => {
                     html += `
-                        <div class="channel-item" onclick="selectChannel('${ch.url.replace(/'/g, "\\'")}', '${ch.name.replace(/'/g, "\\'")}')">
-                            <span class="channel-name">📺 ${ch.name}</span>
+                        <div class="channel" onclick="selectChannel('${escapeHtml(ch.url)}', '${escapeHtml(ch.name)}')">
+                            <span class="channel-icon">📺</span>
+                            <span class="channel-name">${escapeHtml(ch.name)}</span>
                             ${ch.logo ? `<img src="${ch.logo}" class="channel-logo" onerror="this.style.display='none'">` : ''}
                         </div>
                     `;
@@ -241,18 +373,31 @@
                 html += `</div>`;
             }
             container.innerHTML = html;
+            document.getElementById('stats').innerHTML = `📊 ${channelsToShow.length} chaînes • ${Object.keys(groups).length} catégories`;
         }
-        
+
+        function searchChannels() {
+            displayChannels();
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, '&amp;')
+                      .replace(/</g, '&lt;')
+                      .replace(/>/g, '&gt;')
+                      .replace(/"/g, '&quot;')
+                      .replace(/'/g, '&#39;');
+        }
+
         function selectChannel(url, name) {
             currentChannel = { url, name };
             videoPlayer.src = url;
             videoPlayer.play();
             
-            document.getElementById('currentChannelDisplay').style.display = 'block';
+            document.getElementById('currentInfo').style.display = 'flex';
             document.getElementById('currentChannelName').innerText = name;
         }
-        
-        function playCurrentChannel() {
+
+        function playCurrent() {
             if (currentChannel) {
                 videoPlayer.src = currentChannel.url;
                 videoPlayer.play();
@@ -260,42 +405,52 @@
                 alert('📺 Sélectionnez d\'abord une chaîne');
             }
         }
-        
+
         function stopVideo() {
             videoPlayer.pause();
             videoPlayer.src = '';
         }
-        
+
         async function loadPlaylist() {
-            const m3uUrl = document.getElementById('m3uUrl').value;
-            if (!m3uUrl) {
-                alert('📡 Veuillez coller un lien M3U');
+            const input = document.getElementById('m3uUrl').value;
+            if (!input) {
+                alert('📡 Collez un lien M3U ou une URL Xtream');
                 return;
             }
             
-            document.getElementById('channelsList').innerHTML = '<div class="loading">🔄 Chargement de la playlist...</div>';
+            document.getElementById('channelsList').innerHTML = '<div class="loading">🔄 Chargement en cours...</div>';
             
             try {
-                const response = await fetch(m3uUrl);
-                const content = await response.text();
-                channels = parseM3U(content);
+                const detection = detectUrlType(input);
+                
+                let content;
+                if (detection.type === 'xtream') {
+                    const apiUrl = `${detection.serverUrl}/player_api.php?username=${detection.username}&password=${detection.password}`;
+                    const response = await fetch(apiUrl);
+                    content = await response.text();
+                    channels = parseXtream(content, detection.serverUrl, detection.username, detection.password);
+                } else {
+                    const response = await fetch(input);
+                    content = await response.text();
+                    channels = parseM3U(content);
+                }
+                
+                filteredChannels = [...channels];
                 displayChannels();
                 
                 if (channels.length > 0) {
+                    localStorage.setItem('lastM3U', input);
                     document.getElementById('channelsList').scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    document.getElementById('channelsList').innerHTML = '<div class="info-message">⚠️ Aucune chaîne trouvée. Vérifiez votre lien</div>';
                 }
             } catch (error) {
-                console.error('Erreur:', error);
-                document.getElementById('channelsList').innerHTML = '<div class="info">❌ Erreur de chargement. Vérifiez le lien M3U</div>';
+                console.error(error);
+                document.getElementById('channelsList').innerHTML = '<div class="info-message">❌ Erreur de chargement. Vérifiez votre lien et votre connexion</div>';
             }
         }
-        
-        // Sauvegarder le dernier lien utilisé
-        document.getElementById('m3uUrl').addEventListener('blur', function() {
-            localStorage.setItem('lastM3U', this.value);
-        });
-        
-        // Charger le dernier lien sauvegardé
+
+        // Charger dernier lien utilisé
         const lastM3U = localStorage.getItem('lastM3U');
         if (lastM3U) {
             document.getElementById('m3uUrl').value = lastM3U;
